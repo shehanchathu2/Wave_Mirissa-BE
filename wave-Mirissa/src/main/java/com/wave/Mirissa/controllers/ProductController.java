@@ -28,9 +28,9 @@ public class ProductController {
     }
 
     @PostMapping("/Addproducts")
-    public ResponseEntity<?> addProduct(@RequestPart Products product, @RequestPart MultipartFile imageFile) {
+    public ResponseEntity<?> addProduct( @RequestPart("products") Products products, @RequestPart("imageFile") MultipartFile imageFile) {
         try {
-            Products product1 = productService.addProduct(product, imageFile);
+            Products product1 = productService.addProduct(products, imageFile);
             return new ResponseEntity<>(product1, HttpStatus.CREATED);
         } catch (Exception e) {
             return new ResponseEntity<>(e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);

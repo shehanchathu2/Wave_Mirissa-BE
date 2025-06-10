@@ -39,7 +39,7 @@ public class WebSecurityConfiguration {
                 .csrf(csrf -> csrf.disable())
                 .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .authorizeHttpRequests(auth -> auth
-                        .requestMatchers("/register","/authentication","/users","/user/{id}").permitAll()
+                        .requestMatchers("/register","/authentication","/users","/user/{id}","/product/**","/product/Addproducts").permitAll()
                         .requestMatchers("/api/**").authenticated()
                 );
         return http.build();

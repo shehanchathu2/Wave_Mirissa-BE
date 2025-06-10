@@ -1,10 +1,25 @@
 package com.wave.Mirissa.models;
 
+import com.fasterxml.jackson.annotation.JsonSubTypes;
+import com.fasterxml.jackson.annotation.JsonTypeInfo;
 import jakarta.persistence.*;
 
 import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.util.Date;
+
+@JsonTypeInfo(
+        use = JsonTypeInfo.Id.NAME,
+        include = JsonTypeInfo.As.PROPERTY,
+        property = "type"
+)
+
+@JsonSubTypes({
+        @JsonSubTypes.Type(value = Ring.class, name = "ring"),
+        @JsonSubTypes.Type(value = Necklace.class, name = "neckless"),
+        @JsonSubTypes.Type(value = WristBand.class, name = "wristband")
+})
+
 
 @Entity
 @Inheritance(strategy = InheritanceType.JOINED)
@@ -28,15 +43,15 @@ public abstract class Products {
         this.quantity = quantity;
     }
 
-    public String getDesc() {
-        return desc;
+    private String description;
+
+    public String getDescription() {
+        return description;
     }
 
-    public void setDesc(String desc) {
-        this.desc = desc;
+    public void setDescription(String description) {
+        this.description = description;
     }
-
-    private String desc;
 
     private String imageName;
     private String imageType;

@@ -31,19 +31,35 @@ public abstract class Products {
     private String material;
     private BigDecimal price;
     private String category;
-    private LocalDate releasedate;
     private boolean available;
-    private int quantity;
-
-    public int getQuantity() {
-        return quantity;
-    }
-
-    public void setQuantity(int quantity) {
-        this.quantity = quantity;
-    }
-
     private String description;
+    private String imageName;
+    private String imageType;
+    @Lob
+    private byte[] imageData;
+
+    private String customization;
+    private String gender;
+
+    public String getCustomization() {
+        return customization;
+    }
+
+    public void setCustomization(String customization) {
+        this.customization = customization;
+    }
+
+    public String getGender() {
+        return gender;
+    }
+
+    public void setGender(String gender) {
+        this.gender = gender;
+    }
+
+
+
+
 
     public String getDescription() {
         return description;
@@ -53,8 +69,7 @@ public abstract class Products {
         this.description = description;
     }
 
-    private String imageName;
-    private String imageType;
+
 
     public String getImageName() {
         return imageName;
@@ -80,8 +95,7 @@ public abstract class Products {
         this.imageData = imageData;
     }
 
-    @Lob
-    private byte[] imageData;
+
 
 
     public Long getId() {
@@ -124,13 +138,7 @@ public abstract class Products {
         this.category = category;
     }
 
-    public LocalDate getReleasedate() {
-        return releasedate;
-    }
 
-    public void setReleasedate(LocalDate releasedate) {
-        this.releasedate = releasedate;
-    }
 
     public boolean isAvailable() {
         return available;

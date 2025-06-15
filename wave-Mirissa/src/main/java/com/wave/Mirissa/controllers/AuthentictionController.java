@@ -2,7 +2,7 @@ package com.wave.Mirissa.controllers;
 
 import com.wave.Mirissa.dtos.AuthenticationRequest;
 import com.wave.Mirissa.dtos.AuthenticationResponse;
-import com.wave.Mirissa.utils.jwtUtil;
+import com.wave.Mirissa.utils.JwtUtil;
 import io.jsonwebtoken.io.IOException;
 import jakarta.servlet.http.HttpServletResponse;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -13,21 +13,17 @@ import org.springframework.security.authentication.UsernamePasswordAuthenticatio
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.ResponseBody;
-import org.springframework.web.bind.annotation.RestController;
-
-import java.net.http.HttpResponse;
+import org.springframework.web.bind.annotation.*;
 
 @RestController
+@CrossOrigin(origins = "http://localhost:3000")
 public class AuthentictionController {
     @Autowired
     private AuthenticationManager authenticationManager;
     @Autowired
     private UserDetailsService userDetailsService;
     @Autowired
-    private jwtUtil jwtUtil ;
+    private JwtUtil jwtUtil ;
 
     @PostMapping("/authentication")
     public AuthenticationResponse createAuthenticationToken(@RequestBody AuthenticationRequest authenticationRequest, HttpServletResponse response) throws BadCredentialsException, DisabledException, UsernameNotFoundException, IOException, java.io.IOException {

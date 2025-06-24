@@ -31,19 +31,41 @@ public class WebSecurityConfiguration {
         return new BCryptPasswordEncoder();
     }
 
+//    @Bean
+//    public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
+//        http
+//                .cors(withDefaults())
+//                .securityMatcher(new AntPathRequestMatcher("/**")) // optional: limits to match only certain paths
+//                .csrf(csrf -> csrf.disable())
+//                .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
+//                .authorizeHttpRequests(auth -> auth
+//                        .requestMatchers("/register","/authentication","/users","/user/{id}","/product/**","/product/addproducts").permitAll()
+//                        .requestMatchers("/api/**").authenticated()
+//                );
+//        return http.build();
+//    }
+
+
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         http
                 .cors(withDefaults())
-                .securityMatcher(new AntPathRequestMatcher("/**")) // optional: limits to match only certain paths
                 .csrf(csrf -> csrf.disable())
                 .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .authorizeHttpRequests(auth -> auth
-                        .requestMatchers("/register","/authentication","/users","/user/{id}","/product/**","/product/Addproducts").permitAll()
-                        .requestMatchers("/api/**").authenticated()
+                        .requestMatchers(
+                                "/register",
+                                "/authentication",
+                                "/users",
+                                "/user/*",
+                                "/product/**"
+                        ).permitAll()
+                        .anyRequest().authenticated() // require auth for everything else
                 );
         return http.build();
     }
+
+
     @Bean
     public AuthenticationManager authenticationManager(AuthenticationConfiguration authenticationConfiguration) throws Exception {
         return authenticationConfiguration.getAuthenticationManager();

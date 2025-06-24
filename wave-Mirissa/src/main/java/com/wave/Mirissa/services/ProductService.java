@@ -23,12 +23,43 @@ public class ProductService {
 
     }
 
-    public Products addProduct(Products products, MultipartFile imageFile) throws IOException {
-        products.setImageName(imageFile.getOriginalFilename());
-        products.setImageType(imageFile.getContentType());
-        products.setImageData(imageFile.getBytes());
+    public Products addProduct(Products products) {
+        // At this point, products.getImageUrl() already contains the Cloudinary URL from frontend
         return productRepository.save(products);
-
-
     }
+
+//    public Products addProduct(Products products, MultipartFile imageFile) throws IOException {
+//        products.setImageName(imageFile.getOriginalFilename());
+//        products.setImageType(imageFile.getContentType());
+//        products.setImageData(imageFile.getBytes());
+//        return productRepository.save(products);
+//    }
+
+    public Products getProduct(int id) {
+        return productRepository.findById((long) id).orElse(null);
+    }
+
+
+    public void deleteProduct(Long id) {
+        productRepository.deleteById(id);
+    }
+
+//    public Products updateProduct(Long id, Products updatedProduct) {
+//        Products existingProduct = productRepository.findById(id)
+//                .orElseThrow(() -> new RuntimeException("Product not found"));
+//
+//        existingProduct.setName(updatedProduct.getName());
+//        existingProduct.setMaterial(updatedProduct.getMaterial());
+//        existingProduct.setPrice(updatedProduct.getPrice());
+//        existingProduct.setQuantity(updatedProduct.getQuantity());
+//        existingProduct.setCategory(updatedProduct.getCategory());
+//        existingProduct.setAvailable(updatedProduct.isAvailable());
+//        existingProduct.setDescription(updatedProduct.getDescription());
+//        existingProduct.setCustomization(updatedProduct.getCustomization());
+//        existingProduct.setGender(updatedProduct.getGender());
+//        existingProduct.setImageUrl(updatedProduct.getImageUrl());
+//
+//        return productRepository.save(existingProduct);
+//    }
+
 }

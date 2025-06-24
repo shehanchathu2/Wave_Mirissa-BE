@@ -1,150 +1,88 @@
 package com.wave.Mirissa.models;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonSubTypes;
 import com.fasterxml.jackson.annotation.JsonTypeInfo;
 import jakarta.persistence.*;
 
 import java.math.BigDecimal;
-import java.time.LocalDate;
-import java.util.Date;
 
 @JsonTypeInfo(
         use = JsonTypeInfo.Id.NAME,
         include = JsonTypeInfo.As.PROPERTY,
         property = "type"
 )
-
 @JsonSubTypes({
         @JsonSubTypes.Type(value = Ring.class, name = "ring"),
         @JsonSubTypes.Type(value = Necklace.class, name = "neckless"),
         @JsonSubTypes.Type(value = WristBand.class, name = "wristband")
 })
-
-
 @Entity
 @Inheritance(strategy = InheritanceType.JOINED)
 public abstract class Products {
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
+
     private String name;
     private String material;
     private BigDecimal price;
     private String category;
     private boolean available;
     private String description;
-    private String imageName;
-    private String imageType;
-    @Lob
-    private byte[] imageData;
-
     private String customization;
     private String gender;
 
-    public String getCustomization() {
-        return customization;
-    }
+    @JsonProperty("image_url1")
+    private String imageUrl1;
 
-    public void setCustomization(String customization) {
-        this.customization = customization;
-    }
+    @JsonProperty("image_url2")
+    private String imageUrl2;
 
-    public String getGender() {
-        return gender;
-    }
+    @JsonProperty("image_url3")
+    private String imageUrl3;
 
-    public void setGender(String gender) {
-        this.gender = gender;
-    }
+    private int quantity;
 
+    // Getters and Setters
 
+    public Long getId() { return id; }
+    public void setId(Long id) { this.id = id; }
 
+    public String getName() { return name; }
+    public void setName(String name) { this.name = name; }
 
+    public String getMaterial() { return material; }
+    public void setMaterial(String material) { this.material = material; }
 
-    public String getDescription() {
-        return description;
-    }
+    public BigDecimal getPrice() { return price; }
+    public void setPrice(BigDecimal price) { this.price = price; }
 
-    public void setDescription(String description) {
-        this.description = description;
-    }
+    public String getCategory() { return category; }
+    public void setCategory(String category) { this.category = category; }
 
+    public boolean isAvailable() { return available; }
+    public void setAvailable(boolean available) { this.available = available; }
 
+    public String getDescription() { return description; }
+    public void setDescription(String description) { this.description = description; }
 
-    public String getImageName() {
-        return imageName;
-    }
+    public String getCustomization() { return customization; }
+    public void setCustomization(String customization) { this.customization = customization; }
 
-    public void setImageName(String imageName) {
-        this.imageName = imageName;
-    }
+    public String getGender() { return gender; }
+    public void setGender(String gender) { this.gender = gender; }
 
-    public String getImageType() {
-        return imageType;
-    }
+    public String getImageUrl1() { return imageUrl1; }
+    public void setImageUrl1(String imageUrl1) { this.imageUrl1 = imageUrl1; }
 
-    public void setImageType(String imageType) {
-        this.imageType = imageType;
-    }
+    public String getImageUrl2() { return imageUrl2; }
+    public void setImageUrl2(String imageUrl2) { this.imageUrl2 = imageUrl2; }
 
-    public byte[] getImageData() {
-        return imageData;
-    }
+    public String getImageUrl3() { return imageUrl3; }
+    public void setImageUrl3(String imageUrl3) { this.imageUrl3 = imageUrl3; }
 
-    public void setImageData(byte[] imageData) {
-        this.imageData = imageData;
-    }
-
-
-
-
-    public Long getId() {
-        return id;
-    }
-
-    public void setId(Long id) {
-        this.id = id;
-    }
-
-    public String getName() {
-        return name;
-    }
-
-    public void setName(String name) {
-        this.name = name;
-    }
-
-    public String getMaterial() {
-        return material;
-    }
-
-    public void setMaterial(String material) {
-        this.material = material;
-    }
-
-    public BigDecimal getPrice() {
-        return price;
-    }
-
-    public void setPrice(BigDecimal price) {
-        this.price = price;
-    }
-
-    public String getCategory() {
-        return category;
-    }
-
-    public void setCategory(String category) {
-        this.category = category;
-    }
-
-
-
-    public boolean isAvailable() {
-        return available;
-    }
-
-    public void setAvailable(boolean available) {
-        this.available = available;
-    }
+    public int getQuantity() { return quantity; }
+    public void setQuantity(int quantity) { this.quantity = quantity; }
 }

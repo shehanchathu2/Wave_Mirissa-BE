@@ -62,7 +62,33 @@ public class ProductService {
 //        return productRepository.save(existingProduct);
 //    }
 <<<<<<< Updated upstream
+<<<<<<< Updated upstream
 =======
+=======
+
+
+    // ProductService.java
+    public Products updateProduct(Long id, Products updatedProduct) {
+        Products existing = productRepository.findById(id)
+                .orElseThrow(() -> new RuntimeException("Product not found"));
+
+        existing.setName(updatedProduct.getName());
+        existing.setMaterial(updatedProduct.getMaterial());
+        existing.setPrice(updatedProduct.getPrice());
+        existing.setQuantity(updatedProduct.getQuantity());
+        existing.setCategory(updatedProduct.getCategory());
+        existing.setDescription(updatedProduct.getDescription());
+        existing.setGender(updatedProduct.getGender());
+        existing.setCustomization(updatedProduct.getCustomization());
+        existing.setAvailable(updatedProduct.isAvailable());
+
+        existing.setImageUrl1(updatedProduct.getImageUrl1());
+        existing.setImageUrl2(updatedProduct.getImageUrl2());
+        existing.setImageUrl3(updatedProduct.getImageUrl3());
+
+        return productRepository.save(existing);
+    }
+>>>>>>> Stashed changes
 
 
     // ProductService.java

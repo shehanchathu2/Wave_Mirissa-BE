@@ -7,6 +7,10 @@ import jakarta.persistence.*;
 
 import java.math.BigDecimal;
 <<<<<<< Updated upstream
+<<<<<<< Updated upstream
+=======
+import java.util.List;
+>>>>>>> Stashed changes
 =======
 import java.util.List;
 >>>>>>> Stashed changes
@@ -28,7 +32,11 @@ public abstract class Products {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
 <<<<<<< Updated upstream
+<<<<<<< Updated upstream
     private Long id;
+=======
+    private Long product_id;
+>>>>>>> Stashed changes
 =======
     private Long product_id;
 >>>>>>> Stashed changes
@@ -51,6 +59,7 @@ public abstract class Products {
     @JsonProperty("image_url3")
     private String imageUrl3;
 <<<<<<< Updated upstream
+<<<<<<< Updated upstream
 
     private int quantity;
 
@@ -61,6 +70,8 @@ public abstract class Products {
 
     public String getName() { return name; }
     public void setName(String name) { this.name = name; }
+=======
+>>>>>>> Stashed changes
 =======
 >>>>>>> Stashed changes
 

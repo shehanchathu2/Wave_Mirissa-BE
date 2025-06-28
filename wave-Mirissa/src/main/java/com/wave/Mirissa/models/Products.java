@@ -6,14 +6,7 @@ import com.fasterxml.jackson.annotation.JsonTypeInfo;
 import jakarta.persistence.*;
 
 import java.math.BigDecimal;
-<<<<<<< Updated upstream
-<<<<<<< Updated upstream
-=======
 import java.util.List;
->>>>>>> Stashed changes
-=======
-import java.util.List;
->>>>>>> Stashed changes
 
 @JsonTypeInfo(
         use = JsonTypeInfo.Id.NAME,
@@ -31,15 +24,7 @@ public abstract class Products {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-<<<<<<< Updated upstream
-<<<<<<< Updated upstream
-    private Long id;
-=======
     private Long product_id;
->>>>>>> Stashed changes
-=======
-    private Long product_id;
->>>>>>> Stashed changes
 
     private String name;
     private String material;
@@ -58,22 +43,6 @@ public abstract class Products {
 
     @JsonProperty("image_url3")
     private String imageUrl3;
-<<<<<<< Updated upstream
-<<<<<<< Updated upstream
-
-    private int quantity;
-
-    // Getters and Setters
-
-    public Long getId() { return id; }
-    public void setId(Long id) { this.id = id; }
-
-    public String getName() { return name; }
-    public void setName(String name) { this.name = name; }
-=======
->>>>>>> Stashed changes
-=======
->>>>>>> Stashed changes
 
     private int quantity;
 

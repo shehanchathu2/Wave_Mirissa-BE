@@ -1,5 +1,6 @@
 package com.wave.Mirissa.models;
 
+import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 
 @Entity
@@ -12,6 +13,5 @@ public class Ring extends Products{
     }
 
     public void setSize(double size) {
-        this.size = size;
-    }
+        this.size=size;}
 }

@@ -11,6 +11,5 @@ public class Necklace extends Products{
     }
 
     public void setLength(double length) {
-        this.length = length;
-    }
+        this.length =length;}
 }

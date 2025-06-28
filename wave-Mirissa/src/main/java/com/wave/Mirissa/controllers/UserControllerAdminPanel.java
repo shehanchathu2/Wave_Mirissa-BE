@@ -34,10 +34,7 @@ public class UserControllerAdminPanel {
     User updateUser(@RequestBody User newUser, @PathVariable Long id) {
         return userRepository.findById(id)
                 .map(user -> {
-
-                    user.setUsername(newUser.getUsername());
-                    user.setEmail(newUser.getEmail());
-                    user.setPassword(newUser.getPassword());
+                    user.setRole(newUser.getRole()); // ✅ only role updated
                     return userRepository.save(user);
                 }).orElseThrow(() -> new UserNotFoundException(id));
     }

@@ -27,25 +27,6 @@ public class CustomizationService {
                 return customizationRepository.save(customization);
         }
 
-//        public Customization updateCustomization(Long itemId, Customization newData, MultipartFile customizationImage) throws IOException {
-//                Customization existing = customizationRepository.findById(itemId)
-//                        .orElseThrow(() -> new IllegalArgumentException("Customization not found with ID: " + itemId));
-//
-//                existing.setName(newData.getName());
-//                existing.setPrice(newData.getPrice());
-//
-//                if (customizationImage != null && !customizationImage.isEmpty()) {
-//                        existing.setImageName(customizationImage.getOriginalFilename());
-//                        existing.setImageType(customizationImage.getContentType());
-//                        existing.setImageData(customizationImage.getBytes());
-//                }
-//
-//                return customizationRepository.save(existing);
-//        }
-
-
-
-
 
 
         public Customization updateCustomization(Long itemId, Customization updatedCustomization) {

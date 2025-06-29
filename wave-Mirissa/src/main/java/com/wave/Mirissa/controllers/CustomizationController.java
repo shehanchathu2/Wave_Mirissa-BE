@@ -66,31 +66,6 @@ public class CustomizationController {
 }
 }
 
-//    @DeleteMapping("/Customizations/{item_id}")
-//    public ResponseEntity<String> deleteCustomization(@PathVariable Long item_id) {
-//        try {
-//            SimpleJpaRepository<T, Long> customizationRepository;
-//            Optional<Customization> customizationOpt = customizationRepository.findById(item_id);
-//            if (customizationOpt.isEmpty()) {
-//                return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Customization not found!");
-//            }
-//
-//            Customization customization = customizationOpt.get();
-//
-//            // Unlink from all products
-//            for (Products product : customization.getProducts()) {
-//                product.getCustomizations().remove(customization);
-//            }
-//
-//            customization.getProducts().clear();
-//
-//            customizationRepository.delete(customization);
-//            return ResponseEntity.ok("Customization with Id: " + item_id + " deleted successfully!");
-//        } catch (Exception e) {
-//            e.printStackTrace();
-//            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Error deleting customization!");
-//        }
-//    }
 
 
     @GetMapping("/customizations")

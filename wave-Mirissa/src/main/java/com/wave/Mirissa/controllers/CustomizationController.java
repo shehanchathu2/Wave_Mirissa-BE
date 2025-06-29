@@ -56,7 +56,15 @@ public class CustomizationController {
         }
     }
 
-
+    @DeleteMapping("/Customizations/delete/{itemId}")
+    public ResponseEntity<?> deleteCustomization (@PathVariable Long itemId ){
+        try {
+            customizationService.deleteCustomization(itemId);
+            return ResponseEntity.ok("Customization deleted successfully.");
+        } catch (Exception e) {
+            return new ResponseEntity<>(e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
+}
+}
 
 //    @DeleteMapping("/Customizations/{item_id}")
 //    public ResponseEntity<String> deleteCustomization(@PathVariable Long item_id) {

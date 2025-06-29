@@ -35,7 +35,6 @@ public class ProductService {
 
     @Transactional
     public Products addProduct(Products products) {
-        // At this point, products.getImageUrl() already contains the Cloudinary URL from frontend
         List<Customization> inputCustomizations = products.getCustomizations();
         if (inputCustomizations != null && !inputCustomizations.isEmpty()) {
             List<Long> ids = inputCustomizations.stream()

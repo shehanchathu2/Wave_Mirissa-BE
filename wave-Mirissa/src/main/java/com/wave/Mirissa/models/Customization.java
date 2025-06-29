@@ -1,6 +1,9 @@
 package com.wave.Mirissa.models;
 
 import jakarta.persistence.*;
+import org.hibernate.annotations.OnDelete;
+import org.hibernate.annotations.OnDeleteAction;
+
 import java.math.BigDecimal;
 import java.util.List;
 
@@ -24,6 +27,7 @@ public class Customization {
     private byte[] imageData;
 
     @ManyToMany(mappedBy = "customizations")
+//    @OnDelete(action = OnDeleteAction.CASCADE)
     private List<Products> products;
 
     // Getters & Setters

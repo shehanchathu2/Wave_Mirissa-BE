@@ -1,9 +1,12 @@
 package com.wave.Mirissa.services;
 
+import com.wave.Mirissa.models.Customization;
 import com.wave.Mirissa.models.Products;
+import com.wave.Mirissa.repositories.CustomizationRepository;
 import com.wave.Mirissa.repositories.ProductRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
@@ -23,17 +26,26 @@ public class ProductService {
 
     }
 
-    public Products addProduct(Products products) {
-        // At this point, products.getImageUrl() already contains the Cloudinary URL from frontend
-        return productRepository.save(products);
-    }
-
-//    public Products addProduct(Products products, MultipartFile imageFile) throws IOException {
-//        products.setImageName(imageFile.getOriginalFilename());
-//        products.setImageType(imageFile.getContentType());
-//        products.setImageData(imageFile.getBytes());
+//    public Products addProduct(Products products) {
+//         At this point, products.getImageUrl() already contains the Cloudinary URL from frontend
 //        return productRepository.save(products);
 //    }
+
+    private CustomizationRepository customizationRepository;
+
+    @Transactional
+    public Products addProduct(Products products) {
+        // At this point, products.getImageUrl() already contains the Cloudinary URL from frontend
+        List<Customization> inputCustomizations = products.getCustomizations();
+        if (inputCustomizations != null && !inputCustomizations.isEmpty()) {
+            List<Long> ids = inputCustomizations.stream()
+                    .map(Customization::getItem_id)
+                    .toList();
+            List<Customization> fullCustomizations = customizationRepository.findAllById(ids);
+            products.setCustomizations(fullCustomizations);
+        }
+        return productRepository.save(products);
+    }
 
     public Products getProduct(int id) {
         return productRepository.findById((long) id).orElse(null);
@@ -44,27 +56,10 @@ public class ProductService {
         productRepository.deleteById(id);
     }
 
-//    public Products updateProduct(Long id, Products updatedProduct) {
-//        Products existingProduct = productRepository.findById(id)
-//                .orElseThrow(() -> new RuntimeException("Product not found"));
-//
-//        existingProduct.setName(updatedProduct.getName());
-//        existingProduct.setMaterial(updatedProduct.getMaterial());
-//        existingProduct.setPrice(updatedProduct.getPrice());
-//        existingProduct.setQuantity(updatedProduct.getQuantity());
-//        existingProduct.setCategory(updatedProduct.getCategory());
-//        existingProduct.setAvailable(updatedProduct.isAvailable());
-//        existingProduct.setDescription(updatedProduct.getDescription());
-//        existingProduct.setCustomization(updatedProduct.getCustomization());
-//        existingProduct.setGender(updatedProduct.getGender());
-//        existingProduct.setImageUrl(updatedProduct.getImageUrl());
-//
-//        return productRepository.save(existingProduct);
-//    }
 
 
 
-    // ProductService.java
+
     public Products updateProduct(Long id, Products updatedProduct) {
         Products existing = productRepository.findById(id)
                 .orElseThrow(() -> new RuntimeException("Product not found"));

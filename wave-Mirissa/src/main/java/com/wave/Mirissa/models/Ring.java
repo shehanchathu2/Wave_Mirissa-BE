@@ -1,6 +1,7 @@
 package com.wave.Mirissa.models;
 
 import jakarta.persistence.Column;
+import jakarta.persistence.DiscriminatorValue;
 import jakarta.persistence.Entity;
 
 @Entity

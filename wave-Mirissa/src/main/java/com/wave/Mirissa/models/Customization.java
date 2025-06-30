@@ -1,5 +1,6 @@
 package com.wave.Mirissa.models;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import jakarta.persistence.*;
 import org.hibernate.annotations.OnDelete;
 import org.hibernate.annotations.OnDeleteAction;
@@ -28,6 +29,7 @@ public class Customization {
 
     @ManyToMany(mappedBy = "customizations")
 //    @OnDelete(action = OnDeleteAction.CASCADE)
+    @JsonBackReference
     private List<Products> products;
 
     // Getters & Setters

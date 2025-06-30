@@ -31,6 +31,7 @@ public class ProductService {
 //        return productRepository.save(products);
 //    }
 
+    @Autowired
     private CustomizationRepository customizationRepository;
 
     @Transactional

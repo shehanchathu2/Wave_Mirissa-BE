@@ -1,5 +1,6 @@
 package com.wave.Mirissa.models;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonSubTypes;
 import com.fasterxml.jackson.annotation.JsonTypeInfo;
@@ -11,7 +12,7 @@ import java.util.List;
 @JsonTypeInfo(
         use = JsonTypeInfo.Id.NAME,
         include = JsonTypeInfo.As.PROPERTY,
-        property = "type"
+        property = "producttype"
 )
 @JsonSubTypes({
         @JsonSubTypes.Type(value = Ring.class, name = "ring"),
@@ -55,7 +56,18 @@ public abstract class Products {
     )
     private List<Customization> customizations;
 
-    // Getters and Setters
+    @JsonProperty("producttype")
+    @Column(name = "producttype")
+    private String typeForDb;
+
+    public String getTypeForDb() {
+        return typeForDb;
+    }
+
+    public void setTypeForDb(String typeForDb) {
+        this.typeForDb = typeForDb;
+    }
+// Getters and Setters
 
 
     public Long getProduct_id() {

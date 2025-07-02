@@ -1,7 +1,6 @@
 package com.wave.Mirissa.services;
 
-import com.wave.Mirissa.models.Customization;
-import com.wave.Mirissa.models.Products;
+import com.wave.Mirissa.models.*;
 import com.wave.Mirissa.repositories.CustomizationRepository;
 import com.wave.Mirissa.repositories.ProductRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -11,13 +10,14 @@ import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 public class ProductService {
     @Autowired
     private ProductRepository productRepository;
     public List<Products> getAllProducts() {
-    return productRepository.findAll();
+        return productRepository.findAll();
     }
 
     public Products getProductsByID(Long id) {
@@ -36,6 +36,7 @@ public class ProductService {
 
     @Transactional
     public Products addProduct(Products products) {
+
         List<Customization> inputCustomizations = products.getCustomizations();
         if (inputCustomizations != null && !inputCustomizations.isEmpty()) {
             List<Long> ids = inputCustomizations.stream()
@@ -43,6 +44,25 @@ public class ProductService {
                     .toList();
             List<Customization> fullCustomizations = customizationRepository.findAllById(ids);
             products.setCustomizations(fullCustomizations);
+
+            String customizationNames = fullCustomizations.stream()
+                    .map(Customization::getName)
+                    .collect(Collectors.joining(","));
+            products.setCustomization(customizationNames);
+        }else {
+            products.setCustomization(null);
+        }
+
+
+        System.out.println("Saving producttype: " + products.getTypeForDb());
+        System.out.println("Incoming product JSON: " + products);
+
+        if (products instanceof Ring) {
+            products.setTypeForDb("ring");
+        } else if (products instanceof Necklace) {
+            products.setTypeForDb("neckless");
+        } else if (products instanceof WristBand) {
+            products.setTypeForDb("wristband");
         }
         return productRepository.save(products);
     }
@@ -74,12 +94,26 @@ public class ProductService {
         existing.setCustomization(updatedProduct.getCustomization());
         existing.setAvailable(updatedProduct.isAvailable());
 
+
+
         existing.setImageUrl1(updatedProduct.getImageUrl1());
         existing.setImageUrl2(updatedProduct.getImageUrl2());
         existing.setImageUrl3(updatedProduct.getImageUrl3());
 
+//        existing.setProducttype(updatedProduct.getProducttype());
+        if (updatedProduct instanceof Ring) {
+            existing.setTypeForDb("ring");
+        } else if (updatedProduct instanceof Necklace) {
+            existing.setTypeForDb("neckless");
+        } else if (updatedProduct instanceof WristBand) {
+            existing.setTypeForDb("wristband");
+        } else {
+            existing.setTypeForDb(null);
+        }
+
+
         return productRepository.save(existing);
     }
-    
+
 
 }

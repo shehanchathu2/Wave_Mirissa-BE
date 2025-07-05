@@ -63,6 +63,12 @@ public class ProductService {
             products.setTypeForDb("neckless");
         } else if (products instanceof WristBand) {
             products.setTypeForDb("wristband");
+        } else if (products instanceof Bracelet) {
+            products.setTypeForDb("Bracelet");
+        }else if (products instanceof Earring) {
+            products.setTypeForDb("earring");
+        }else if (products instanceof Anklet) {
+            products.setTypeForDb("anklet");
         }
         return productRepository.save(products);
     }
@@ -87,7 +93,7 @@ public class ProductService {
         existing.setName(updatedProduct.getName());
         existing.setMaterial(updatedProduct.getMaterial());
         existing.setPrice(updatedProduct.getPrice());
-        existing.setQuantity(updatedProduct.getQuantity());
+
         existing.setCategory(updatedProduct.getCategory());
         existing.setDescription(updatedProduct.getDescription());
         existing.setGender(updatedProduct.getGender());
@@ -107,7 +113,16 @@ public class ProductService {
             existing.setTypeForDb("neckless");
         } else if (updatedProduct instanceof WristBand) {
             existing.setTypeForDb("wristband");
-        } else {
+        } else if (updatedProduct instanceof Bracelet) {
+            existing.setTypeForDb("bracelet");
+        } else if (updatedProduct instanceof Earring) {
+            existing.setTypeForDb("earring");
+        }else if (updatedProduct instanceof Anklet) {
+            existing.setTypeForDb("anklet");
+        }
+
+
+        else {
             existing.setTypeForDb(null);
         }
 

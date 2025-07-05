@@ -17,7 +17,11 @@ import java.util.List;
 @JsonSubTypes({
         @JsonSubTypes.Type(value = Ring.class, name = "ring"),
         @JsonSubTypes.Type(value = Necklace.class, name = "neckless"),
-        @JsonSubTypes.Type(value = WristBand.class, name = "wristband")
+        @JsonSubTypes.Type(value = WristBand.class, name = "wristband"),
+        @JsonSubTypes.Type(value = Bracelet.class, name = "bracelet"),
+        @JsonSubTypes.Type(value = Earring.class, name = "earring"),
+        @JsonSubTypes.Type(value = Anklet.class, name = "anklet"),
+
 })
 @Entity
 @Inheritance(strategy = InheritanceType.JOINED)
@@ -45,7 +49,7 @@ public abstract class Products {
     @JsonProperty("image_url3")
     private String imageUrl3;
 
-    private int quantity;
+
 
 
     @ManyToMany
@@ -166,13 +170,7 @@ public abstract class Products {
         this.imageUrl3 = imageUrl3;
     }
 
-    public int getQuantity() {
-        return quantity;
-    }
 
-    public void setQuantity(int quantity) {
-        this.quantity = quantity;
-    }
 
     public List<Customization> getCustomizations() {
         return customizations;

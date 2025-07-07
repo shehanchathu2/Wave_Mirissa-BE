@@ -7,7 +7,7 @@ import jakarta.persistence.Id;
 import jakarta.persistence.Table;
 
 @Entity
-@Table(name = "users") // ✅ Safe name, avoids reserved keyword
+@Table(name = "users")
 public class User {
 
     @Id
@@ -17,7 +17,7 @@ public class User {
     private String username;
     private String email;
     private String password;
-    private String role = "USER";
+    private String role = "user";
 
     public Long getId() {
         return id;

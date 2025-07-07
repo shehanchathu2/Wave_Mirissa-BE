@@ -28,7 +28,7 @@ public class Customization {
     private byte[] imageData;
 
     @ManyToMany(mappedBy = "customizations")
-//    @OnDelete(action = OnDeleteAction.CASCADE)
+    @OnDelete(action = OnDeleteAction.CASCADE)
     @JsonBackReference
     private List<Products> products;
 

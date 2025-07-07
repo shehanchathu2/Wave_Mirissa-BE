@@ -66,7 +66,8 @@
                                     "/customizations",
                                     "/AllCustomizations",
                                     "/api/payments/**",
-                                    "/api/payhere/hash"
+                                    "/api/payhere/hash",
+                                    "/api/payhere/notify"
 
                             ).permitAll()
                             .requestMatchers(HttpMethod.OPTIONS, "/**").permitAll()

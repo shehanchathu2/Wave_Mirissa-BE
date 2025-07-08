@@ -3,9 +3,16 @@ package com.wave.Mirissa.controllers;
 import com.wave.Mirissa.dtos.OrderDTO;
 import com.wave.Mirissa.models.Order;
 import com.wave.Mirissa.models.Products;
+import com.wave.Mirissa.models.User;
 import com.wave.Mirissa.repositories.OrderRepository;
+import com.wave.Mirissa.repositories.ProductRepository;
+import com.wave.Mirissa.repositories.UserRepository;
+import com.wave.Mirissa.services.OrderService;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.math.BigDecimal;
 import java.util.List;
 
 @RestController
@@ -13,41 +20,15 @@ import java.util.List;
 @CrossOrigin(origins = "*")
 public class AdminOrderController {
 
-    private OrderRepository orderRepository;
+ private OrderService orderService;
 
-    public AdminOrderController(OrderRepository orderRepository) {
-        this.orderRepository = orderRepository;
+    public AdminOrderController(OrderService orderService) {
+        this.orderService = orderService;
     }
 
-    @GetMapping("/{id}")
-    public OrderDTO getOrder(@PathVariable Long id) {
-        return orderRepository.findById(id).map(this::mapTODTO)
-                .orElseThrow(() -> new RuntimeException("Order not found"));
+    @PostMapping
+    public ResponseEntity<OrderDTO> createOrder(@RequestBody OrderDTO orderDTO){
+        OrderDTO createOrder = orderService.createOrder(orderDTO);
+        return new ResponseEntity<>(createOrder,HttpStatus.CREATED);
     }
-
-
-    private OrderDTO mapTODTO(Order order) {
-        OrderDTO dto = new OrderDTO();
-        dto.setId(order.getId());
-        dto.setOrderId(order.getOrderId());
-        dto.setAmount(order.getAmount().toPlainString());
-        dto.setCurrency(order.getCurrency());
-        dto.setStatus(order.getStatus());
-        dto.setPaymentMethod(order.getPaymentMethod());
-        dto.setUserId(order.getUser() != null ? order.getUser().getId() : null);
-        dto.setProductIds(
-                order.getProducts() != null ?
-                        order.getProducts().stream().map(Products::getProduct_id).toList() :
-                        null
-        );
-        dto.setPayhereRef(order.getPayhereRef());
-        return dto;
-    }
-
-
-    public List<OrderDTO> getAllOrders() {
-        return orderRepository.findAll().stream().map(this::mapTODTO).toList();
-
-    }
-
 }

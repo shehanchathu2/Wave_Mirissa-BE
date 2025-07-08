@@ -67,7 +67,8 @@
                                     "/AllCustomizations",
                                     "/api/payments/**",
                                     "/api/payhere/hash",
-                                    "/api/payhere/notify"
+                                    "/api/payhere/notify",
+                                    "/api/admin/orders/**"
 
 
                             ).permitAll()

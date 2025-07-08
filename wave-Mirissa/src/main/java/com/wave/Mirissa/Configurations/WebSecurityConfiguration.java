@@ -69,6 +69,7 @@
                                     "/api/payhere/hash",
                                     "/api/payhere/notify"
 
+
                             ).permitAll()
                             .requestMatchers(HttpMethod.OPTIONS, "/**").permitAll()
                             .anyRequest().authenticated()

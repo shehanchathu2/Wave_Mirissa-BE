@@ -68,7 +68,9 @@
                                     "/api/payments/**",
                                     "/api/payhere/hash",
                                     "/api/payhere/notify",
-                                    "/api/admin/orders/**"
+                                    "/api/admin/orders/**",
+                                    "/cart/**",
+                                    "/cart/clear/**"
 
 
                             ).permitAll()

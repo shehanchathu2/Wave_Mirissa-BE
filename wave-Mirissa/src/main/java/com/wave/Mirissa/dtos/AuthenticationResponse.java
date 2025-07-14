@@ -5,17 +5,18 @@ public class AuthenticationResponse {
     private String email;
     private String role;
     private String username;
+    private Long id; // 👈 Add this
 
-
-
-    public AuthenticationResponse(String jwt,String email,String role,String username) {
-
+    // Constructor
+    public AuthenticationResponse(String jwt, String email, String role, String username, Long id) {
         this.jwt = jwt;
-        this.email=email;
-        this.role=role;
-        this.username=username;
+        this.email = email;
+        this.role = role;
+        this.username = username;
+        this.id = id;
     }
 
+    // Getters and Setters
     public String getJwt() {
         return jwt;
     }
@@ -32,7 +33,19 @@ public class AuthenticationResponse {
         return role;
     }
 
-    public String getUsername(){return username;}
+    public String getUsername() {
+        return username;
+    }
 
-    public void setUsername(String username){this.username=username;}
+    public void setUsername(String username) {
+        this.username = username;
+    }
+
+    public Long getId() { // 👈 Add getter
+        return id;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
+    }
 }

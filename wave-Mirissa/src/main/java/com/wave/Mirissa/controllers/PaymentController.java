@@ -1,10 +1,13 @@
 package com.wave.Mirissa.controllers;
 
 import com.wave.Mirissa.dtos.PaymentDTO;
+import com.wave.Mirissa.models.Order;
+import com.wave.Mirissa.repositories.OrderRepository;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.math.BigDecimal;
 import java.math.BigInteger;
 import java.nio.charset.StandardCharsets;
 import java.security.MessageDigest;
@@ -17,6 +20,9 @@ import java.util.Map;
 @RequestMapping("/api/payhere")
 @CrossOrigin(origins = "*")
 public class PaymentController {
+
+    private OrderRepository orderRepository;
+
     private static final String MERCHANT_ID = "1231066";
     private static final String MERCHANT_SECRET = "MTQzMTYwMTYwODcxNzY4NjU0NDIxNDQwMzY3OTAyODI0NDc3Mjg4";
 
@@ -64,6 +70,7 @@ public class PaymentController {
 
     @PostMapping("/notify")
     public ResponseEntity<String> handlePaymentNotification(@RequestBody Map<String ,String> payload){
+
         String receivedMerchantId = payload.get("merchant_id");
         String orderId = payload.get("order_id");
         String payHereAmount = payload.get("payhere_amount");
@@ -73,6 +80,13 @@ public class PaymentController {
 
         String localMd5sig = getMd5(receivedMerchantId + orderId + payHereAmount + payhereCurrency + statusCode + getMd5(MERCHANT_SECRET));
         if(localMd5sig.equalsIgnoreCase(md5sig) && "2".equals(statusCode)){
+            Order order = new Order();
+            order.setOrderId(orderId);
+            order.setAmount(new BigDecimal(payHereAmount));
+            order.setStatus("Paid!!");
+            order.setPaymentMethod("PayHere");
+            order.setPayhereRef(payload.get("payment_reference"));//new
+            orderRepository.save(order);
             return new ResponseEntity<>("payment sucess", HttpStatus.OK);
         }else {
             return new ResponseEntity<>("Payment verification failed for order:",HttpStatus.INTERNAL_SERVER_ERROR);

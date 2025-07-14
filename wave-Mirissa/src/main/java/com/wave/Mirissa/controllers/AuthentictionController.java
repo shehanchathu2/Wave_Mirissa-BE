@@ -20,37 +20,55 @@ import org.springframework.web.bind.annotation.*;
 @RestController
 @CrossOrigin(origins = "http://localhost:5173")
 public class AuthentictionController {
+
     @Autowired
     private AuthenticationManager authenticationManager;
+
     @Autowired
     private UserDetailsService userDetailsService;
+
     @Autowired
-    private JwtUtil jwtUtil ;
+    private JwtUtil jwtUtil;
 
     @Autowired
     private UserRepository userRepository;
 
     @PostMapping("/authentication")
-    public AuthenticationResponse createAuthenticationToken(@RequestBody AuthenticationRequest authenticationRequest, HttpServletResponse response) throws BadCredentialsException, DisabledException, UsernameNotFoundException, IOException, java.io.IOException {
-        try{
-    authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(authenticationRequest.getEmail(),authenticationRequest.getPassword()));
-        }catch (BadCredentialsException B){
-            throw new BadCredentialsException("Incorrect user name or Password");
-        }catch (DisabledException classDisabledException){
-            response.sendError(HttpServletResponse.SC_NOT_FOUND,"user is not created,Register user first");
+    public AuthenticationResponse createAuthenticationToken(
+            @RequestBody AuthenticationRequest authenticationRequest,
+            HttpServletResponse response
+    ) throws BadCredentialsException, DisabledException, UsernameNotFoundException, IOException, java.io.IOException {
+
+        try {
+            authenticationManager.authenticate(
+                    new UsernamePasswordAuthenticationToken(
+                            authenticationRequest.getEmail(),
+                            authenticationRequest.getPassword()
+                    )
+            );
+        } catch (BadCredentialsException ex) {
+            throw new BadCredentialsException("Incorrect username or password");
+        } catch (DisabledException ex) {
+            response.sendError(HttpServletResponse.SC_NOT_FOUND, "User is not created, register user first");
             return null;
         }
 
-
         final UserDetails userDetails = userDetailsService.loadUserByUsername(authenticationRequest.getEmail());
         final String jwt = jwtUtil.generateToken(userDetails.getUsername());
+
         User user = userRepository.findByEmail(authenticationRequest.getEmail());
         if (user == null) {
             response.sendError(HttpServletResponse.SC_UNAUTHORIZED, "User not found");
             return null;
         }
-        return new AuthenticationResponse(jwt, user.getEmail(), user.getRole(),user.getUsername());
 
-
+        // Return AuthenticationResponse including user ID
+        return new AuthenticationResponse(
+                jwt,
+                user.getEmail(),
+                user.getRole(),
+                user.getUsername(),
+                user.getId()
+        );
     }
 }

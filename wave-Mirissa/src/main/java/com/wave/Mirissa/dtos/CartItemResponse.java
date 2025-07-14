@@ -9,7 +9,7 @@ public class CartItemResponse {
     private int quantity;
     private String imageUrl;
 
-    // Constructors
+
     public CartItemResponse(Long id, String productName, BigDecimal price, int quantity, String imageUrl) {
         this.id = id;
         this.productName = productName;

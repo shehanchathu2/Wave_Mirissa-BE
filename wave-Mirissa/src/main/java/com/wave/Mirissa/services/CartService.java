@@ -15,7 +15,7 @@ public class CartService {
     @Autowired private UserRepository userRepository;
     @Autowired private ProductRepository productsRepository;
 
-    public Cart addToCart(Long userId, Long productId, int quantity) {
+    public Cart addToCart(Long userId, Long productId, int quantity, String size, String customMaterial, BigDecimal customPrice) {
         User user = userRepository.findById(userId).orElseThrow();
         Products product = productsRepository.findById(productId).orElseThrow();
 
@@ -30,10 +30,15 @@ public class CartService {
         item.setCart(cart);
         item.setProduct(product);
         item.setQuantity(quantity);
-        item.setPrice(product.getPrice().multiply(BigDecimal.valueOf(quantity)));
+        item.setSize(size);
+        item.setCustomMaterial(customMaterial);
+
+
+        BigDecimal totalItemPrice = customPrice.multiply(BigDecimal.valueOf(quantity));
+        item.setPrice(totalItemPrice);
 
         cart.getItems().add(item);
-        cart.setTotal(cart.getTotal().add(item.getPrice()));
+        cart.setTotal(cart.getTotal().add(totalItemPrice));
 
         cartItemRepository.save(item);
         return cartRepository.save(cart);

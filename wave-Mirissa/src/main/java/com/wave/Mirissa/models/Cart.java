@@ -2,6 +2,7 @@ package com.wave.Mirissa.models;
 
 import jakarta.persistence.*;
 import java.math.BigDecimal;
+import java.util.ArrayList;
 import java.util.List;
 
 @Entity
@@ -15,9 +16,14 @@ public class Cart {
     private User user;
 
     @OneToMany(mappedBy = "cart", cascade = CascadeType.ALL, orphanRemoval = true)
-    private List<CartItem> items;
+    private List<CartItem> items = new ArrayList<>();  // ✅ Always initialized
 
     private BigDecimal total;
+
+    public Cart() {
+        this.items = new ArrayList<>();
+        this.total = BigDecimal.ZERO;
+    }
 
     public Long getId() {
         return id;

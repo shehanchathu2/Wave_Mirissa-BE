@@ -23,7 +23,14 @@ public class CartController {
 
     @PostMapping("/add")
     public CartResponse addToCart(@RequestBody CartItemRequest request) {
-        Cart cart = cartService.addToCart(request.getUserId(), request.getProductId(), request.getQuantity());
+        Cart cart = cartService.addToCart(
+                request.getUserId(),
+                request.getProductId(),
+                request.getQuantity(),
+                request.getSize(),
+                request.getCustomMaterial(),
+                request.getPrice()  // ✅ pass price from frontend
+        );
         return convertToDto(cart);
     }
 

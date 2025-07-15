@@ -55,4 +55,15 @@ public class CartService {
         cart.setTotal(BigDecimal.ZERO);
         cartRepository.save(cart);
     }
+
+    public Cart removeItemFromCart(Long itemId) {
+        CartItem item = cartItemRepository.findById(itemId).orElseThrow();
+        Cart cart = item.getCart();
+
+        cart.setTotal(cart.getTotal().subtract(item.getPrice()));
+        cart.getItems().remove(item);
+        cartItemRepository.delete(item);
+
+        return cartRepository.save(cart);
+    }
 }

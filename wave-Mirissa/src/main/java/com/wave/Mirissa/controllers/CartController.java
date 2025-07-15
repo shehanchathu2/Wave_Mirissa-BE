@@ -59,7 +59,9 @@ public class CartController {
                         item.getProduct().getName(),
                         item.getPrice(),
                         item.getQuantity(),
-                        item.getProduct().getImageUrl1()
+                        item.getProduct().getImageUrl1(),
+                        item.getCustomMaterial(),
+                        item.getSize()
                 )
         ).collect(Collectors.toList());
 

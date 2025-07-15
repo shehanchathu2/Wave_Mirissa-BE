@@ -21,6 +21,11 @@ public class Order {
     private String paymentMethod;
     private String payhereRef;
 
+    @Column(name = "product_names", columnDefinition = "TEXT")
+    private String ProductNames;
+    @Column(name = "customization_summary", columnDefinition = "TEXT")
+    private String customizationSummary;
+
 
     @ManyToOne
     @JoinColumn(name = "user_id")
@@ -123,5 +128,22 @@ public class Order {
 
     public void setCreatedAt(LocalDateTime createdAt) {
         this.createdAt = createdAt;
+    }
+
+
+    public String getProductNames() {
+        return ProductNames;
+    }
+
+    public void setProductNames(String productNames) {
+        ProductNames = productNames;
+    }
+
+    public String getCustomizationSummary() {
+        return customizationSummary;
+    }
+
+    public void setCustomizationSummary(String customizationSummary) {
+        this.customizationSummary = customizationSummary;
     }
 }

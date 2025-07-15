@@ -1,6 +1,7 @@
 package com.wave.Mirissa.services;
 
 import com.wave.Mirissa.dtos.OrderDTO;
+import com.wave.Mirissa.models.Customization;
 import com.wave.Mirissa.models.Order;
 import com.wave.Mirissa.models.Products;
 import com.wave.Mirissa.models.User;
@@ -11,6 +12,7 @@ import org.springframework.stereotype.Service;
 
 import java.math.BigDecimal;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 public class OrderService {
@@ -40,9 +42,27 @@ public class OrderService {
 
         }
 
-        if(orderDTO.getProductIds() != null){
+        if(orderDTO.getProductIds() != null && !orderDTO.getProductIds().isEmpty()){
             List<Products> products = productRepository.findAllById(orderDTO.getProductIds());
             order.setProducts(products);
+
+            String productNames = products.stream()
+                    .map(Products::getName)
+                    .collect(Collectors.joining(","));
+            order.setProductNames(productNames);
+
+            String customizationSummary = products.stream()
+                    .map(p ->{
+                        String customizationDetails = (p.getCustomizations() != null && p.getCustomizations().isEmpty())
+                                ? p.getCustomizations().stream()
+                                .map(Customization::getName)
+                                .collect(Collectors.joining(","))
+                                :"No customization";
+                        return p.getName() + ": " + customizationDetails;
+                    })
+                    .collect(Collectors.joining("|"));
+            order.setCustomizationSummary(customizationSummary);
+
         }
 
         Order saveOrder = orderRepository.save(order);

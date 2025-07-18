@@ -21,6 +21,15 @@ public class Order {
     private String paymentMethod;
     private String payhereRef;
 
+    @Column(name = "product_names", columnDefinition = "TEXT")
+    private String productNames;
+    @Column(name = "customization_summary", columnDefinition = "TEXT")
+    private String customizationSummary;
+
+
+    @Column(columnDefinition = "TEXT")
+    private String pendingProductData;
+
 
     @ManyToOne
     @JoinColumn(name = "user_id")
@@ -29,7 +38,7 @@ public class Order {
     @ManyToMany
     @JoinTable(
             name = "order_products",
-            joinColumns = @JoinColumn(name = "orderId"),
+            joinColumns = @JoinColumn(name = "order_id"),
             inverseJoinColumns = @JoinColumn(name = "product_id")
     )
     private List<Products> products;
@@ -41,6 +50,20 @@ public class Order {
     protected void onCreate() {
         this.createdAt = LocalDateTime.now();
     }
+
+
+    //for retive data to admin pannel
+    @OneToMany(mappedBy = "order", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    private List<OrderItem> orderItems;
+
+    public List<OrderItem> getOrderItems() {
+        return orderItems;
+    }
+
+    public void setOrderItems(List<OrderItem> orderItems) {
+        this.orderItems = orderItems;
+    }
+    //for retive data to admin pannel
 
 
 
@@ -123,5 +146,31 @@ public class Order {
 
     public void setCreatedAt(LocalDateTime createdAt) {
         this.createdAt = createdAt;
+    }
+
+
+    public String getProductNames() {
+        return productNames;
+    }
+
+    public void setProductNames(String productNames) {
+        this.productNames = productNames;
+    }
+
+    public String getCustomizationSummary() {
+        return customizationSummary;
+    }
+
+    public void setCustomizationSummary(String customizationSummary) {
+        this.customizationSummary = customizationSummary;
+    }
+
+
+    public String getPendingProductData() {
+        return pendingProductData;
+    }
+
+    public void setPendingProductData(String pendingProductData) {
+        this.pendingProductData = pendingProductData;
     }
 }

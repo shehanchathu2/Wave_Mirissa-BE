@@ -1,6 +1,7 @@
 package com.wave.Mirissa.controllers;
 
 import com.wave.Mirissa.dtos.OrderDTO;
+import com.wave.Mirissa.dtos.OrderDetailedDTO;
 import com.wave.Mirissa.models.Order;
 import com.wave.Mirissa.models.Products;
 import com.wave.Mirissa.models.User;
@@ -29,6 +30,15 @@ public class AdminOrderController {
     @PostMapping
     public ResponseEntity<OrderDTO> createOrder(@RequestBody OrderDTO orderDTO){
         OrderDTO createOrder = orderService.createOrder(orderDTO);
+
         return new ResponseEntity<>(createOrder,HttpStatus.CREATED);
     }
+
+
+    @GetMapping("/paid")
+    public ResponseEntity<List<OrderDetailedDTO>> getPaidOrdersForAdmin() {
+        List<OrderDetailedDTO> orders = orderService.getPaidOrdersForAdmin();
+        return ResponseEntity.ok(orders);
+    }
+
 }

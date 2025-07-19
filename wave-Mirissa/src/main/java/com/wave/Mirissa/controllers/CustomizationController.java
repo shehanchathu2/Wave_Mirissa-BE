@@ -3,6 +3,7 @@ package com.wave.Mirissa.controllers;
 import com.wave.Mirissa.models.Customization;
 import com.wave.Mirissa.models.Products;
 import com.wave.Mirissa.repositories.CustomizationRepository;
+import com.wave.Mirissa.services.CustomizationRecommendationService;
 import com.wave.Mirissa.services.CustomizationService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.jpa.repository.support.SimpleJpaRepository;
@@ -21,6 +22,13 @@ import java.util.Optional;
 public class CustomizationController {
     @Autowired
     private CustomizationService customizationService;
+
+    private final CustomizationRecommendationService customizationRecommendationService;
+
+    @Autowired
+    public CustomizationController(CustomizationRecommendationService customizationRecommendationService) {
+        this.customizationRecommendationService = customizationRecommendationService;
+    }
 
     @GetMapping("/AllCustomizations")
     public ResponseEntity<List<Customization>> getAllCustomizations(){
@@ -81,7 +89,15 @@ public class CustomizationController {
                 .toList();
         return ResponseEntity.ok(response);
     }
-
+    @PostMapping("/Cus_analyze")
+    public ResponseEntity<List<Customization>> analyzeAndRecommendCustomizations(@RequestParam("image") MultipartFile image) {
+        try {
+            List<Customization> recommended = customizationRecommendationService.analyzeAndFetchRecommendedCustomizations(image);
+            return ResponseEntity.ok(recommended);
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
+        }
+    }
 
 
 

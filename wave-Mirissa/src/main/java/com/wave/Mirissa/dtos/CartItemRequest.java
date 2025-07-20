@@ -8,7 +8,7 @@ public class CartItemRequest {
     private int quantity;
     private String size;
     private String customMaterial;
-    private BigDecimal price; // ✅ Added price field
+    private BigDecimal price;
 
     public Long getUserId() {
         return userId;

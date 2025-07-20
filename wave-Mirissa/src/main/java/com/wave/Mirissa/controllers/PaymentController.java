@@ -1,8 +1,16 @@
 package com.wave.Mirissa.controllers;
 
+import com.fasterxml.jackson.core.type.TypeReference;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.wave.Mirissa.dtos.PaymentDTO;
+import com.wave.Mirissa.models.Customization;
 import com.wave.Mirissa.models.Order;
+import com.wave.Mirissa.models.OrderItem;
+import com.wave.Mirissa.models.Products;
+import com.wave.Mirissa.repositories.CustomizationRepository;
+import com.wave.Mirissa.repositories.OrderItemRepository;
 import com.wave.Mirissa.repositories.OrderRepository;
+import com.wave.Mirissa.repositories.ProductRepository;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -14,7 +22,9 @@ import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import java.text.DecimalFormat;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
+import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping("/api/payhere")
@@ -22,6 +32,9 @@ import java.util.Map;
 public class PaymentController {
 
     private OrderRepository orderRepository;
+    private ProductRepository productRepository;
+    private CustomizationRepository customizationRepository;
+    private OrderItemRepository orderItemRepository;
 
     private static final String MERCHANT_ID = "1231066";
     private static final String MERCHANT_SECRET = "MTQzMTYwMTYwODcxNzY4NjU0NDIxNDQwMzY3OTAyODI0NDc3Mjg4";
@@ -86,8 +99,58 @@ public class PaymentController {
             order.setStatus("Paid!!");
             order.setPaymentMethod("PayHere");
             order.setPayhereRef(payload.get("payment_reference"));//new
+
             orderRepository.save(order);
-            return new ResponseEntity<>("payment sucess", HttpStatus.OK);
+
+
+//            try {
+//                ObjectMapper objectMapper = new ObjectMapper();
+//                List<Map<String, Object>> productList = objectMapper.readValue(
+//                        order.getPendingProductData(),
+//                        new TypeReference<List<Map<String, Object>>>() {}
+//                );
+//
+//                for (Map<String,Object> productMap : productList){
+//                    Long productID = Long.valueOf(productMap.get("productId").toString());
+//                    List<Integer> customizationIds = (List<Integer>) productMap.get("customizationIds");
+//
+//                    Products products = productRepository.findById(productID)
+//                            .orElseThrow(() -> new RuntimeException("Product not found: " + productID));
+//
+//
+//                    OrderItem orderItem = new OrderItem();
+//                    orderItem.setOrder(order);
+//                    orderItem.setProducts(products);
+//                    orderItem.setPriceSnapshot(products.getPrice());
+//                    orderItem.setProductNameSnapshot(products.getName());
+//
+//                    if (customizationIds != null && !customizationIds.isEmpty()) {
+//                        List<Customization> customizations = customizationRepository.findAllById(
+//                                customizationIds.stream().map(Long::valueOf).collect(Collectors.toList())
+//                        );
+//                        orderItem.setSelectCustomization(customizations);
+//                    }else {
+//                        orderItem.setSelectCustomization(null);
+//                    }
+//                    orderItemRepository.save(orderItem);
+//                }
+//
+//
+//
+//            } catch (Exception e) {
+//                // log and handle the error cleanly
+//                e.printStackTrace();
+//                throw new RuntimeException("Error parsing pending product data", e);
+//            }
+
+
+
+
+
+
+
+            return new ResponseEntity<>("Payment successful,OrderItems saved", HttpStatus.OK);
+
         }else {
             return new ResponseEntity<>("Payment verification failed for order:",HttpStatus.INTERNAL_SERVER_ERROR);
         }

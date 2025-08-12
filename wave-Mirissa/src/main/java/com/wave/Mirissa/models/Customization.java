@@ -32,6 +32,13 @@ public class Customization {
     @JsonBackReference
     private List<Products> products;
 
+
+    @Column(name = "face_shape_tags")
+    private String faceShapeTags;
+
+    @Column(name = "skin_tone_tags")
+    private String skinToneTags;
+
     // Getters & Setters
 
 
@@ -97,5 +104,21 @@ public class Customization {
 
     public void setProducts(List<Products> products) {
         this.products = products;
+    }
+
+    public String getFaceShapeTags() {
+        return faceShapeTags;
+    }
+
+    public void setFaceShapeTags(String faceShapeTags) {
+        this.faceShapeTags = faceShapeTags;
+    }
+
+    public String getSkinToneTags() {
+        return skinToneTags;
+    }
+
+    public void setSkinToneTags(String skinToneTags) {
+        this.skinToneTags = skinToneTags;
     }
 }

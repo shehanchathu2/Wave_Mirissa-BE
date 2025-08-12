@@ -71,6 +71,16 @@ public abstract class Products {
     public void setTypeForDb(String typeForDb) {
         this.typeForDb = typeForDb;
     }
+
+
+
+    @Column(name = "face_shape_tags")
+    private String faceShapeTags;
+
+    @Column(name = "skin_tone_tags")
+    private String skinToneTags;
+
+
 // Getters and Setters
 
 
@@ -178,5 +188,21 @@ public abstract class Products {
 
     public void setCustomizations(List<Customization> customizations) {
         this.customizations = customizations;
+    }
+
+    public String getFaceShapeTags() {
+        return faceShapeTags;
+    }
+
+    public void setFaceShapeTags(String faceShapeTags) {
+        this.faceShapeTags = faceShapeTags;
+    }
+
+    public String getSkinToneTags() {
+        return skinToneTags;
+    }
+
+    public void setSkinToneTags(String skinToneTags) {
+        this.skinToneTags = skinToneTags;
     }
 }

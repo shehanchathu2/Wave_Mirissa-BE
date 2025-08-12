@@ -70,7 +70,9 @@
                                     "/api/payhere/notify",
                                     "/api/admin/orders/**",
                                     "/cart/**",
-                                    "/cart/clear/**"
+                                    "/cart/clear/**",
+                                    "/wishlist/**",
+                                    "/wishlist/remove"
 
 
                             ).permitAll()

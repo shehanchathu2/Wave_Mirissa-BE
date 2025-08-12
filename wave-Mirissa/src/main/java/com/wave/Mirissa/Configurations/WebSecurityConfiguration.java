@@ -72,9 +72,14 @@
                                     "/api/admin/orders/**",
                                     "/cart/**",
                                     "/cart/clear/**",
+ 
+                                    "/wishlist/**",
+                                    "/wishlist/remove"
+
                                     "/api/recommendations/**",
                                    "/actuator/**",
                                     "/Cus_analyze"
+
 
 
 

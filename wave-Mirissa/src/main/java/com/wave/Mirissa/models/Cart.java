@@ -16,7 +16,7 @@ public class Cart {
     private User user;
 
     @OneToMany(mappedBy = "cart", cascade = CascadeType.ALL, orphanRemoval = true)
-    private List<CartItem> items = new ArrayList<>();  // ✅ Always initialized
+    private List<CartItem> items = new ArrayList<>();  // ✅ Always ini
 
     private BigDecimal total;
 

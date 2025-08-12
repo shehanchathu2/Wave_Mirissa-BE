@@ -7,15 +7,28 @@ public class CartItemResponse {
     private String productName;
     private BigDecimal price;
     private int quantity;
+    private String size;
     private String imageUrl;
+    private String customMaterial;
 
 
-    public CartItemResponse(Long id, String productName, BigDecimal price, int quantity, String imageUrl) {
+
+    public CartItemResponse(Long id, String productName, BigDecimal price, int quantity, String imageUrl,String customMaterial,String size) {
         this.id = id;
         this.productName = productName;
         this.price = price;
         this.quantity = quantity;
         this.imageUrl = imageUrl;
+        this.customMaterial=customMaterial;
+        this.size=size;
+    }
+
+    public String getSize() {
+        return size;
+    }
+
+    public void setSize(String size) {
+        this.size = size;
     }
 
     public Long getId() {
@@ -56,5 +69,13 @@ public class CartItemResponse {
 
     public void setImageUrl(String imageUrl) {
         this.imageUrl = imageUrl;
+    }
+
+    public String getCustomMaterial() {
+        return customMaterial;
+    }
+
+    public void setCustomMaterial(String customMaterial) {
+        this.customMaterial = customMaterial;
     }
 }

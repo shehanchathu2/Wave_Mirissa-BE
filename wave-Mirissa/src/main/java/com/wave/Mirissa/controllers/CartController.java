@@ -45,6 +45,13 @@ public class CartController {
         cartService.clearCart(userId);
     }
 
+    @DeleteMapping("/item/{itemId}")
+    public CartResponse deleteCartItem(@PathVariable Long itemId) {
+        Cart updatedCart = cartService.removeItemFromCart(itemId);
+        return convertToDto(updatedCart);
+    }
+
+
     private CartResponse convertToDto(Cart cart) {
         List<CartItemResponse> items = cart.getItems().stream().map(item ->
                 new CartItemResponse(
@@ -52,7 +59,9 @@ public class CartController {
                         item.getProduct().getName(),
                         item.getPrice(),
                         item.getQuantity(),
-                        item.getProduct().getImageUrl1()
+                        item.getProduct().getImageUrl1(),
+                        item.getCustomMaterial(),
+                        item.getSize()
                 )
         ).collect(Collectors.toList());
 

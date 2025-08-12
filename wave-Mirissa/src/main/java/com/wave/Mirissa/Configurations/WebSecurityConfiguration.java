@@ -2,6 +2,7 @@
 
     import org.springframework.context.annotation.Bean;
     import org.springframework.context.annotation.Configuration;
+    import org.springframework.core.annotation.Order;
     import org.springframework.http.HttpMethod;
     import org.springframework.security.authentication.AuthenticationManager;
     import org.springframework.security.config.annotation.authentication.configuration.AuthenticationConfiguration;
@@ -71,8 +72,15 @@
                                     "/api/admin/orders/**",
                                     "/cart/**",
                                     "/cart/clear/**",
+ 
                                     "/wishlist/**",
                                     "/wishlist/remove"
+
+                                    "/api/recommendations/**",
+                                   "/actuator/**",
+                                    "/Cus_analyze"
+
+
 
 
                             ).permitAll()
@@ -101,6 +109,37 @@
             source.registerCorsConfiguration("/**", config);
             return source;
         }
+
+//        @Bean
+//        @Order(1)
+//        public SecurityFilterChain actuatorSecurityFilterChain(HttpSecurity http) throws Exception {
+//            http
+//                    .securityMatcher("/actuator/**")
+//                    .authorizeHttpRequests(authorize -> authorize.anyRequest().permitAll())
+//                    .csrf(csrf -> csrf.disable());
+//            return http.build();
+//        }
+//
+//        @Bean
+//        @Order(2)
+//        public SecurityFilterChain applicationSecurity(HttpSecurity http) throws Exception {
+//            http
+//                    .cors(withDefaults())
+//                    .csrf(csrf -> csrf.disable())
+//                    .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
+//                    .authorizeHttpRequests(auth -> auth
+//                            .requestMatchers(
+//                                    "/register", "/authentication", "/users", "/user/*",
+//                                    "/product/**", "/AddCustomizations", "/Customizations/**",
+//                                    "/api/payments/**", "/api/payhere/**", "/api/admin/orders/**",
+//                                    "/cart/**", "/api/recommendations/**"
+//                            ).permitAll()
+//                            .anyRequest().authenticated()
+//                    );
+//            return http.build();
+//        }
+
+
 
 
 

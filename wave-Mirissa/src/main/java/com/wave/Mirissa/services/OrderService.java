@@ -7,6 +7,7 @@ import com.wave.Mirissa.repositories.OrderItemRepository;
 import com.wave.Mirissa.repositories.OrderRepository;
 import com.wave.Mirissa.repositories.ProductRepository;
 import com.wave.Mirissa.repositories.UserRepository;
+import jakarta.transaction.Transactional;
 import org.springframework.stereotype.Service;
 
 import java.math.BigDecimal;
@@ -28,6 +29,7 @@ public class OrderService {
         this.orderItemRepository = orderItemRepository;
     }
 
+    @Transactional
     public OrderDTO createOrder(OrderDTO orderDTO) {
         System.out.println("createOrder called with orderId: " + orderDTO.getOrderId());
         System.out.println("Received productIds: " + orderDTO.getProductIds());
@@ -50,14 +52,16 @@ public class OrderService {
             List<Products> productList = productRepository.findAllById(orderDTO.getProductIds());
 
 
-
-
+            if (productList.isEmpty()) {
+                throw new RuntimeException("No products found for IDs: " + orderDTO.getProductIds());
+            }
 
 
             String productNames = productList.stream()
                     .map(Products::getName)
                     .collect(Collectors.joining(","));
             order.setProductNames(productNames);
+
 
             String customizationSummary = productList.stream()
                     .map(p -> {
@@ -71,38 +75,48 @@ public class OrderService {
                     .collect(Collectors.joining("|"));
             order.setCustomizationSummary(customizationSummary);
 
+
+            order.setProducts(productList);
+
             System.out.println("----- Tracing Order Before Save -----");
             System.out.println("Order ID: " + order.getOrderId());
             System.out.println("Product Names: " + order.getProductNames());
             System.out.println("Customization Summary: " + order.getCustomizationSummary());
             System.out.println("--------------------------------------");
 
-            Order tempSavedOrder = orderRepository.save(order);
-            tempSavedOrder.setProducts(productList);
 
-            orderRepository.flush();
-            Order savedOrder = orderRepository.findById(tempSavedOrder.getId()).orElseThrow();
-
+            Order savedOrder = orderRepository.save(order);
 
             System.out.println("Order Saved with ID: " + savedOrder.getId());
+
 
             productList.forEach(product -> {
                 OrderItem orderItem = new OrderItem();
                 orderItem.setOrder(savedOrder);
                 orderItem.setProducts(product);
+
+
                 orderItem.setPriceSnapshot(product.getPrice());
+
+                
+                orderItem.setProductNameSnapshot(product.getName());
+
                 if (product.getCustomizations() != null && !product.getCustomizations().isEmpty()) {
                     orderItem.setSelectCustomization(new ArrayList<>(product.getCustomizations()));
-
                 }
+
                 orderItemRepository.save(orderItem);
             });
+
             return mapToDTO(savedOrder);
+
         } else {
             Order savedOrder = orderRepository.save(order);
             return mapToDTO(savedOrder);
         }
     }
+
+
 
     private OrderDTO mapToDTO(Order order) {
         OrderDTO dto = new OrderDTO();

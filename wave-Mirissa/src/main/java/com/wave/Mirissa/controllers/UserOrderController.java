@@ -10,20 +10,20 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @RestController
-@RequestMapping("/api/admin/orders")
+@RequestMapping("/api/user/orders")
 @CrossOrigin(origins = "http://localhost:5173")
-public class AdminOrderController {
+public class UserOrderController {
+
     private final OrderService orderService;
 
-    public AdminOrderController(OrderService orderService) {
+    public UserOrderController(OrderService orderService) {
         this.orderService = orderService;
     }
 
     @PostMapping
     public ResponseEntity<OrderDTO> createOrder(@RequestBody OrderDTO orderDTO) {
-        // Why: admins may create orders on behalf of a user
-        OrderDTO created = orderService.createOrder(orderDTO);
-        return new ResponseEntity<>(created, HttpStatus.CREATED);
+        OrderDTO createdOrder = orderService.createOrder(orderDTO);
+        return new ResponseEntity<>(createdOrder, HttpStatus.CREATED);
     }
 
     @GetMapping("/paid")

@@ -8,6 +8,8 @@ import com.wave.Mirissa.repositories.OrderRepository;
 import com.wave.Mirissa.repositories.ProductRepository;
 import com.wave.Mirissa.repositories.UserRepository;
 import jakarta.transaction.Transactional;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.math.BigDecimal;
@@ -29,6 +31,7 @@ public class OrderService {
         this.orderItemRepository = orderItemRepository;
     }
 
+
     @Transactional
     public OrderDTO createOrder(OrderDTO orderDTO) {
         System.out.println("createOrder called with orderId: " + orderDTO.getOrderId());
@@ -42,79 +45,73 @@ public class OrderService {
         order.setPaymentMethod(orderDTO.getPaymentMethod());
         order.setPayhereRef(orderDTO.getPayhereRef());
 
+        // Set user if exists
         if (orderDTO.getUserId() != null) {
             User user = userRepository.findById(orderDTO.getUserId())
-                    .orElseThrow(() -> new RuntimeException("User not found"));
+                    .orElseThrow(() -> new RuntimeException("User not found with ID: " + orderDTO.getUserId()));
             order.setUser(user);
         }
 
+        // Process products
         if (orderDTO.getProductIds() != null && !orderDTO.getProductIds().isEmpty()) {
             List<Products> productList = productRepository.findAllById(orderDTO.getProductIds());
 
+            // Find missing product IDs
+            List<Long> foundIds = productList.stream()
+                    .map(Products::getProduct_id)
+                    .toList();
+            List<Long> missingIds = orderDTO.getProductIds().stream()
+                    .filter(id -> !foundIds.contains(id))
+                    .toList();
 
-            if (productList.isEmpty()) {
-                throw new RuntimeException("No products found for IDs: " + orderDTO.getProductIds());
+            if (!missingIds.isEmpty()) {
+                System.out.println("Warning: Some product IDs not found: " + missingIds);
+                // Optionally throw or continue with existing products
+                // throw new RuntimeException("No products found for IDs: " + missingIds);
             }
 
+            if (!productList.isEmpty()) {
+                // Snapshot product names
+                order.setProductNames(productList.stream()
+                        .map(Products::getName)
+                        .collect(Collectors.joining(",")));
 
-            String productNames = productList.stream()
-                    .map(Products::getName)
-                    .collect(Collectors.joining(","));
-            order.setProductNames(productNames);
+                // Snapshot customization summary
+                order.setCustomizationSummary(productList.stream()
+                        .map(p -> {
+                            String customizationDetails = (p.getCustomizations() != null && !p.getCustomizations().isEmpty())
+                                    ? p.getCustomizations().stream()
+                                    .map(Customization::getName)
+                                    .collect(Collectors.joining(","))
+                                    : "No customization";
+                            return p.getName() + ": " + customizationDetails;
+                        })
+                        .collect(Collectors.joining("|")));
 
+                // Build order items
+                List<OrderItem> orderItems = new ArrayList<>();
+                for (Products product : productList) {
+                    OrderItem item = new OrderItem();
+                    item.setOrder(order);
+                    item.setProducts(product);
+                    item.setProductNameSnapshot(product.getName());
+                    item.setPriceSnapshot(product.getPrice());
 
-            String customizationSummary = productList.stream()
-                    .map(p -> {
-                        String customizationDetails = (p.getCustomizations() != null && !p.getCustomizations().isEmpty())
-                                ? p.getCustomizations().stream()
-                                .map(Customization::getName)
-                                .collect(Collectors.joining(","))
-                                : "No customization";
-                        return p.getName() + ": " + customizationDetails;
-                    })
-                    .collect(Collectors.joining("|"));
-            order.setCustomizationSummary(customizationSummary);
+                    if (product.getCustomizations() != null && !product.getCustomizations().isEmpty()) {
+                        item.setSelectCustomization(new ArrayList<>(product.getCustomizations()));
+                    }
 
-
-            order.setProducts(productList);
-
-            System.out.println("----- Tracing Order Before Save -----");
-            System.out.println("Order ID: " + order.getOrderId());
-            System.out.println("Product Names: " + order.getProductNames());
-            System.out.println("Customization Summary: " + order.getCustomizationSummary());
-            System.out.println("--------------------------------------");
-
-
-            Order savedOrder = orderRepository.save(order);
-
-            System.out.println("Order Saved with ID: " + savedOrder.getId());
-
-
-            productList.forEach(product -> {
-                OrderItem orderItem = new OrderItem();
-                orderItem.setOrder(savedOrder);
-                orderItem.setProducts(product);
-
-
-                orderItem.setPriceSnapshot(product.getPrice());
-
-                
-                orderItem.setProductNameSnapshot(product.getName());
-
-                if (product.getCustomizations() != null && !product.getCustomizations().isEmpty()) {
-                    orderItem.setSelectCustomization(new ArrayList<>(product.getCustomizations()));
+                    orderItems.add(item);
                 }
-
-                orderItemRepository.save(orderItem);
-            });
-
-            return mapToDTO(savedOrder);
-
-        } else {
-            Order savedOrder = orderRepository.save(order);
-            return mapToDTO(savedOrder);
+                order.setOrderItems(orderItems);
+            }
         }
+
+        Order savedOrder = orderRepository.save(order);
+        return mapToDTO(savedOrder);
     }
+
+
 
 
 
@@ -170,11 +167,22 @@ public class OrderService {
         return dto;
     }
 
-    public List<OrderDetailedDTO> getPaidOrdersForAdmin()
-    {
-        List<Order> orders = orderRepository.findAllByStatus("PAID");
-        return orders.stream().map(this::mapToDetailedDTO).toList();
+    public List<OrderDetailedDTO> getPaidOrdersForAdmin(Integer page, Integer size) {
+        if (page != null && size != null) {
+            Pageable pageable = PageRequest.of(page, size);
+            List<Order> orders = orderRepository.findAllByStatusWithDetails("PAID", pageable);
+            return orders.stream()
+                    .map(this::mapToDetailedDTO)
+                    .toList();
+        } else {
+            List<Order> orders = orderRepository.findAllByStatusWithDetails("PAID");
+            return orders.stream()
+                    .map(this::mapToDetailedDTO)
+                    .toList();
+        }
     }
+
+
 
 
 

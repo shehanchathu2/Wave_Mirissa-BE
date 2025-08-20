@@ -1,6 +1,7 @@
 package com.wave.Mirissa.controllers;
 
 import com.wave.Mirissa.dtos.AnswerDTO;
+import com.wave.Mirissa.services.PersonalityAnalysisService;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.Arrays;
@@ -11,6 +12,12 @@ import java.util.Map;
 @RequestMapping("/virtual_try_on")
 @CrossOrigin(origins = "*")
 public class VirtualTryOnController {
+
+    private final PersonalityAnalysisService personalityAnalysisService;
+
+    public VirtualTryOnController(PersonalityAnalysisService personalityAnalysisService) {
+        this.personalityAnalysisService = personalityAnalysisService;
+    }
 
     @GetMapping("/api/questions")
     public Map<String, List<String>> getPersonalityQuestions() {
@@ -26,17 +33,11 @@ public class VirtualTryOnController {
     }
 
     @PostMapping("/api/answers")
-    public String receiveAnswers(@RequestBody List<AnswerDTO> answers) {
-        // For now just print or log them
-        answers.forEach(a -> {
-            System.out.println("Q" + a.getQuestionId() + ": " + a.getQuestionText());
-            System.out.println("Answer: " + a.getAnswer());
-        });
+    public Map<String, String> receiveAnswers(@RequestBody List<AnswerDTO> answers) {
+        String personality = personalityAnalysisService.analyzePersonality(answers);
+        System.out.println("📩 Received answers:");
+        answers.forEach(a -> System.out.println(a.getQuestionText() + " -> " + a.getAnswer()));
 
-        // Later we can process with NLP model
-        return "Answers received successfully!";
+        return Map.of("personality", personality);
     }
-
-
-
 }

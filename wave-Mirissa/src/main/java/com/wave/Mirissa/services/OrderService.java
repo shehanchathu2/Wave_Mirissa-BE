@@ -96,6 +96,7 @@ public class OrderService {
                     item.setProducts(product);
                     item.setProductNameSnapshot(product.getName());
                     item.setPriceSnapshot(product.getPrice());
+                    item.setProductImageUrlSnapshot(product.getImageUrl1());
 
                     if (product.getCustomizations() != null && !product.getCustomizations().isEmpty()) {
                         item.setSelectCustomization(new ArrayList<>(product.getCustomizations()));

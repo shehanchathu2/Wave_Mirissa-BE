@@ -35,6 +35,17 @@ public class Order {
     private User user;
 
 
+    @Enumerated(EnumType.STRING)
+    @Column(name = "order_status")
+    private OrderStatus orderStatus = OrderStatus.PROCESSING;
+
+    public OrderStatus getOrderStatus() {
+        return orderStatus;
+    }
+
+    public void setOrderStatus(OrderStatus orderStatus) {
+        this.orderStatus = orderStatus;
+    }
 
     @ManyToMany
     @JoinTable(

@@ -56,6 +56,7 @@ public class CartController {
         List<CartItemResponse> items = cart.getItems().stream().map(item ->
                 new CartItemResponse(
                         item.getId(),
+                        item.getProduct().getProduct_id(),
                         item.getProduct().getName(),
                         item.getPrice(),
                         item.getQuantity(),

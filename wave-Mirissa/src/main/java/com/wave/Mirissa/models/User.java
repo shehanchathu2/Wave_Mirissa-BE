@@ -1,8 +1,10 @@
 package com.wave.Mirissa.models;
 
-import jakarta.persistence.*;
-
-import com.wave.Mirissa.models.Role;
+import jakarta.persistence.Entity;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.Id;
+import jakarta.persistence.Table;
 
 @Entity
 @Table(name = "users")
@@ -15,9 +17,7 @@ public class User {
     private String username;
     private String email;
     private String password;
-    @Enumerated(EnumType.STRING)  // stores as "USER" / "ADMIN"
-    private Role role = Role.USER;
-
+    private String role = "user";
 
     public Long getId() {
         return id;
@@ -51,11 +51,11 @@ public class User {
         this.password = password;
     }
 
-    public Role getRole() {
+    public String getRole() {
         return role;
     }
 
-    public void setRole(Role role) {
+    public void setRole(String role) {
         this.role = role;
     }
 }

@@ -1,7 +1,6 @@
 package com.wave.Mirissa.controllers;
 
 import com.wave.Mirissa.models.Products;
-import com.wave.Mirissa.repositories.ProductRepository;
 import com.wave.Mirissa.services.ProductService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -11,9 +10,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 @RestController
 @CrossOrigin(origins = "http://localhost:5173")
@@ -21,7 +18,6 @@ import java.util.Map;
 public class ProductController {
     @Autowired
     private ProductService productService;
-    private ProductRepository productRepository;
 
 
     @GetMapping("/Allproducts")
@@ -65,7 +61,6 @@ public class ProductController {
             return new ResponseEntity<>("Failed to update product: " + e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
-
 
 
 

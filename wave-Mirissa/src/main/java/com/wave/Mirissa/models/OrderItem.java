@@ -36,17 +36,6 @@ public class OrderItem {
     @Column(name = "product_name_snapshot")
     private String productNameSnapshot;
 
-    @Column(name = "product_image_url_snapshot")
-    private String productImageUrlSnapshot;
-
-    public String getProductImageUrlSnapshot() {
-        return productImageUrlSnapshot;
-    }
-
-    public void setProductImageUrlSnapshot(String productImageUrlSnapshot) {
-        this.productImageUrlSnapshot = productImageUrlSnapshot;
-    }
-
     public Long getId() {
         return id;
     }

@@ -1,7 +1,11 @@
 package com.wave.Mirissa.Configurations;
 
+
+import com.wave.Mirissa.services.jwt.JwtAuthenticationFilter;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.http.HttpMethod;
+
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.config.annotation.authentication.configuration.AuthenticationConfiguration;
 import org.springframework.security.config.annotation.method.configuration.EnableMethodSecurity;
@@ -10,6 +14,9 @@ import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
+
+import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
+
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.cors.CorsConfigurationSource;
@@ -24,6 +31,14 @@ import static org.springframework.security.config.Customizer.withDefaults;
 @EnableMethodSecurity
 public class WebSecurityConfiguration {
 
+
+    private final JwtAuthenticationFilter jwtAuthenticationFilter;
+
+    public WebSecurityConfiguration(JwtAuthenticationFilter jwtAuthenticationFilter) {
+        this.jwtAuthenticationFilter = jwtAuthenticationFilter;
+    }
+
+
     @Bean
     public PasswordEncoder passwordEncoder() {
         return new BCryptPasswordEncoder();
@@ -36,6 +51,12 @@ public class WebSecurityConfiguration {
                 .csrf(csrf -> csrf.disable())
                 .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .authorizeHttpRequests(auth -> auth
+
+                        // Allow preflight requests
+                        .requestMatchers(HttpMethod.OPTIONS, "/**").permitAll()
+
+                        // Public endpoints
+
                         .requestMatchers(
                                 "/register",
                                 "/authentication",
@@ -50,35 +71,47 @@ public class WebSecurityConfiguration {
                                 "/api/payments/**",
                                 "/api/payhere/hash",
                                 "/api/payhere/notify",
-                                "/api/admin/orders/**",
+
                                 "/cart/**",
                                 "/cart/clear/**",
-                                
                                 "/wishlist/**",
                                 "/wishlist/remove",
-
                                 "/api/recommendations/**",
                                 "/actuator/**",
-                                "/Cus_analyze",
-                                "/virtual_try_on/api/questions",
-                                "/virtual_try_on/api/answers"
+                                "/Cus_analyze"
                         ).permitAll()
-                        .requestMatchers(org.springframework.http.HttpMethod.OPTIONS, "/**").permitAll()
+
+                        // Role-protected endpoints
+                        .requestMatchers("/api/user/orders/**").permitAll()
+                        .requestMatchers("/api/admin/orders/**").hasRole("ADMIN")
+//                                .requestMatchers("/api/admin/orders").hasAnyAuthority("ADMIN", "USER")
+
+
+
+
+                                // Everything else requires authentication
                         .anyRequest().authenticated()
-                );
+                )
+                // Make sure JWT filter runs before UsernamePasswordAuthenticationFilter
+                .addFilterBefore(jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter.class);
+
 
         return http.build();
     }
 
     @Bean
-    public AuthenticationManager authenticationManager(AuthenticationConfiguration authenticationConfiguration) throws Exception {
-        return authenticationConfiguration.getAuthenticationManager();
+
+    public AuthenticationManager authenticationManager(AuthenticationConfiguration cfg) throws Exception {
+        return cfg.getAuthenticationManager();
+
     }
 
     @Bean
     public CorsConfigurationSource corsConfigurationSource() {
         CorsConfiguration config = new CorsConfiguration();
-        config.setAllowedOrigins(List.of("http://localhost:5173","http://localhost:8080"));
+
+        config.setAllowedOrigins(List.of("http://localhost:5173", "http://localhost:8080"));
+
         config.setAllowedMethods(List.of("GET", "POST", "PUT", "DELETE", "OPTIONS"));
         config.setAllowedHeaders(List.of("*"));
         config.setAllowCredentials(true);

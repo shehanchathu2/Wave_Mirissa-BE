@@ -78,7 +78,9 @@ public class WebSecurityConfiguration {
                                 "/wishlist/remove",
                                 "/api/recommendations/**",
                                 "/actuator/**",
-                                "/Cus_analyze"
+                                "/Cus_analyze",
+                                "virtual_try_on/api/questions",
+                                "virtual_try_on/api/answers"
                         ).permitAll()
 
                         // Role-protected endpoints

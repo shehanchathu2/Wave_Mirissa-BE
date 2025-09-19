@@ -20,22 +20,36 @@ public class NecklaceService {
         return s.toLowerCase().replaceAll("\\s+", ""); // lowercase, remove spaces
     }
 
-    /**
-     * Return imageUrl1 for the first product whose 'personalize' normalized matches given personality normalized.
-     * Returns null if not found.
-     */
-    public String getNecklaceImageUrlByPersonality(String personality) {
+
+//    public String getNecklaceImageUrlByPersonality(String personality) {
+//        if (personality == null || personality.isEmpty()) return null;
+//        String target = normalize(personality);
+//
+//        List<Products> necklaces = productRepository.findByTypeForDbIgnoreCase("neckless"); // note: your DB type is 'neckless'
+//        for (Products p : necklaces) {
+//            String pPersonalize = p.getPersonalize();
+//            if (pPersonalize == null) continue;
+//            if (normalize(pPersonalize).equals(target)) {
+//                return p.getImageUrl1(); // Cloudinary URL saved in DB
+//            }
+//        }
+//        return null;
+//    }
+
+            //return whole product object
+    public Products getNecklaceByPersonality(String personality) {
         if (personality == null || personality.isEmpty()) return null;
         String target = normalize(personality);
 
-        List<Products> necklaces = productRepository.findByTypeForDbIgnoreCase("neckless"); // note: your DB type is 'neckless'
+        List<Products> necklaces = productRepository.findByTypeForDbIgnoreCase("neckless");
         for (Products p : necklaces) {
             String pPersonalize = p.getPersonalize();
             if (pPersonalize == null) continue;
             if (normalize(pPersonalize).equals(target)) {
-                return p.getImageUrl1(); // Cloudinary URL saved in DB
+                return p; // return whole product
             }
         }
         return null;
     }
+
 }

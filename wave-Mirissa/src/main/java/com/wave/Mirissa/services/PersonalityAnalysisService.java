@@ -68,4 +68,6 @@ public class PersonalityAnalysisService {
             return "Cannot find personality, please try again.";
         }
     }
+
+
 }

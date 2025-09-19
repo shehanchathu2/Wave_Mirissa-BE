@@ -80,7 +80,8 @@ public class WebSecurityConfiguration {
                                 "/actuator/**",
                                 "/Cus_analyze",
                                 "/virtual_try_on/api/questions",
-                                "/virtual_try_on/api/answers"
+                                "/virtual_try_on/api/answers",
+                                "/virtual_try_on/api/tryon"
                         ).permitAll()
 
                         // Role-protected endpoints

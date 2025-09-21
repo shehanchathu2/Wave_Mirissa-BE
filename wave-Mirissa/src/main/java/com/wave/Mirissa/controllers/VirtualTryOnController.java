@@ -26,11 +26,11 @@ public class VirtualTryOnController {
     @GetMapping("/api/questions")
     public Map<String, List<String>> getPersonalityQuestions() {
         List<String> questions = Arrays.asList(
-                "How would your friends describe you in one word?",
-                "Do you prefer adventurous experiences or calm and cozy environments?",
-                "Which color do you feel most connected to?",
-                "When making decisions, do you rely more on logic or emotions?",
-                "If you were given a free weekend, how would you spend it?"
+                "When you have free time, how do you usually like to spend it?",
+                "If you are planning something important, how do you usually approach it?",
+                "How do you usually react when unexpected problems or stressful situations come up?",
+                "When you are with friends or new people, how do you usually behave?",
+                "How do you usually treat or think about other people’s feelings and opinions?"
         );
         return Map.of("questions", questions);
     }

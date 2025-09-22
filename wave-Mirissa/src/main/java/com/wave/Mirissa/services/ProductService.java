@@ -1,5 +1,6 @@
 package com.wave.Mirissa.services;
 
+import com.wave.Mirissa.dtos.CategoryOverviewDTO;
 import com.wave.Mirissa.models.*;
 import com.wave.Mirissa.repositories.CustomizationRepository;
 import com.wave.Mirissa.repositories.ProductRepository;
@@ -70,6 +71,11 @@ public class ProductService {
         }else if (products instanceof Anklet) {
             products.setTypeForDb("anklet");
         }
+
+        if (products.getPersonalize() == null || products.getPersonalize().isBlank()) {
+            products.setPersonalize("none"); // default value if nothing sent
+        }
+
         return productRepository.save(products);
     }
 
@@ -99,7 +105,9 @@ public class ProductService {
         existing.setGender(updatedProduct.getGender());
         existing.setCustomization(updatedProduct.getCustomization());
         existing.setAvailable(updatedProduct.isAvailable());
-
+        existing.setSkinToneTags(updatedProduct.getSkinToneTags());
+        existing.setFaceShapeTags(updatedProduct.getFaceShapeTags());
+        existing.setPersonalize(updatedProduct.getPersonalize());
 
 
         existing.setImageUrl1(updatedProduct.getImageUrl1());
@@ -126,9 +134,21 @@ public class ProductService {
             existing.setTypeForDb(null);
         }
 
+        System.out.println("FaceShape: " + updatedProduct.getFaceShapeTags());
+        System.out.println("SkinTone: " + updatedProduct.getSkinToneTags());
 
         return productRepository.save(existing);
     }
 
+
+
+    public List<CategoryOverviewDTO> getProductTypeOverview() {
+        List<Object[]> results = productRepository.countProductsByCategory();
+        return results.stream() .map(r -> new CategoryOverviewDTO((String) r[0], (Long) r[1])) .toList();
+    }
+
+    public long getTotalProducts() {
+        return productRepository.count();
+    }
 
 }

@@ -36,7 +36,7 @@ public class NecklaceService {
 //        return null;
 //    }
 
-            //return whole product object
+    //return whole product object
     public Products getNecklaceByPersonality(String personality) {
         if (personality == null || personality.isEmpty()) return null;
         String target = normalize(personality);

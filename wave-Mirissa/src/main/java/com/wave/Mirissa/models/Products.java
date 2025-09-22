@@ -81,6 +81,10 @@ public abstract class Products {
     private String skinToneTags;
 
 
+    @Column(name = "personalize")
+    private String personalize;
+
+
 // Getters and Setters
 
 
@@ -204,5 +208,13 @@ public abstract class Products {
 
     public void setSkinToneTags(String skinToneTags) {
         this.skinToneTags = skinToneTags;
+    }
+
+    public String getPersonalize() {
+        return personalize;
+    }
+
+    public void setPersonalize(String personalize) {
+        this.personalize = personalize;
     }
 }

@@ -17,5 +17,8 @@ public interface ProductRepository extends JpaRepository<Products,Long> {
     @Query("SELECT p.name, COUNT(p) FROM Products p GROUP BY p.name")
     List<Object[]> countProductsByName();
 
+    // Fetch by type (neckless) so we can filter personalize in Java
+    List<Products> findByTypeForDbIgnoreCase(String typeForDb);
+
 
 }

@@ -1,9 +1,9 @@
 package com.wave.Mirissa.models;
 
 import jakarta.persistence.*;
+
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
-import java.util.ArrayList;
 import java.util.List;
 
 @Entity
@@ -23,29 +23,17 @@ public class Order {
 
     @Column(name = "product_names", columnDefinition = "TEXT")
     private String productNames;
-
     @Column(name = "customization_summary", columnDefinition = "TEXT")
     private String customizationSummary;
+
 
     @Column(columnDefinition = "TEXT")
     private String pendingProductData;
 
+
     @ManyToOne
     @JoinColumn(name = "user_id")
     private User user;
-
-
-    @Enumerated(EnumType.STRING)
-    @Column(name = "order_status")
-    private OrderStatus orderStatus = OrderStatus.PROCESSING;
-
-    public OrderStatus getOrderStatus() {
-        return orderStatus;
-    }
-
-    public void setOrderStatus(OrderStatus orderStatus) {
-        this.orderStatus = orderStatus;
-    }
 
     @ManyToMany
     @JoinTable(
@@ -53,31 +41,32 @@ public class Order {
             joinColumns = @JoinColumn(name = "order_id"),
             inverseJoinColumns = @JoinColumn(name = "product_id")
     )
-    private List<Products> products = new ArrayList<>();
+    private List<Products> products;
 
     @Column(name = "created_at")
-    private LocalDateTime createdAt;
+    private LocalDateTime createdAt ;
 
     @PrePersist
     protected void onCreate() {
         this.createdAt = LocalDateTime.now();
     }
 
-    // ✅ Ensure cascading + orphanRemoval to manage lifecycle of orderItems
-    @OneToMany(mappedBy = "order", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.LAZY)
-    private List<OrderItem> orderItems = new ArrayList<>();
 
-    public void addOrderItem(OrderItem item) {
-        orderItems.add(item);
-        item.setOrder(this); // maintain bidirectional link
+    //for retive data to admin pannel
+    @OneToMany(mappedBy = "order", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    private List<OrderItem> orderItems;
+
+    public List<OrderItem> getOrderItems() {
+        return orderItems;
     }
 
-    public void removeOrderItem(OrderItem item) {
-        orderItems.remove(item);
-        item.setOrder(null);
+    public void setOrderItems(List<OrderItem> orderItems) {
+        this.orderItems = orderItems;
     }
+    //for retive data to admin pannel
 
-    // --- Getters and Setters ---
+
+
 
     public Long getId() {
         return id;
@@ -159,6 +148,7 @@ public class Order {
         this.createdAt = createdAt;
     }
 
+
     public String getProductNames() {
         return productNames;
     }
@@ -175,19 +165,12 @@ public class Order {
         this.customizationSummary = customizationSummary;
     }
 
+
     public String getPendingProductData() {
         return pendingProductData;
     }
 
     public void setPendingProductData(String pendingProductData) {
         this.pendingProductData = pendingProductData;
-    }
-
-    public List<OrderItem> getOrderItems() {
-        return orderItems;
-    }
-
-    public void setOrderItems(List<OrderItem> orderItems) {
-        this.orderItems = orderItems;
     }
 }

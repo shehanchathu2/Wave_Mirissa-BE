@@ -9,6 +9,15 @@ public class OrderItemResponseDTO {
     private int quantity;
     private List<String> customizations;
     private String productImageUrl;
+    private Long product_id;
+
+    public Long getProduct_id() {
+        return product_id;
+    }
+
+    public void setProduct_id(Long product_id) {
+        this.product_id = product_id;
+    }
 
     public String getProductImageUrl() {
         return productImageUrl;

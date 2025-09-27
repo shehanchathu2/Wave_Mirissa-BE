@@ -5,7 +5,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.math.BigDecimal;
+import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 @Service
 public class CartService {
@@ -66,4 +68,47 @@ public class CartService {
 
         return cartRepository.save(cart);
     }
+
+
+    public void removeOrderedItems(Long userId, List<Long> itemIds) {
+        Cart cart = getCart(userId);
+
+        // ✅ Print received item IDs from frontend
+        System.out.println("Received itemIds from frontend: " + itemIds);
+
+        // ✅ Print existing cart item IDs before removal
+        System.out.println("Current cart items before removal: ");
+        cart.getItems().forEach(item ->
+                System.out.println("CartItem ID: " + item.getId() +
+                        ", Product: " + item.getProduct().getName() +
+                        ", Qty: " + item.getQuantity())
+        );
+
+        // remove items directly from the managed collection
+        cart.getItems().removeIf(item -> itemIds.contains(item.getId()));
+
+        // ✅ Print remaining cart items after removal
+        System.out.println("Cart items after removal: ");
+        cart.getItems().forEach(item ->
+                System.out.println("CartItem ID: " + item.getId() +
+                        ", Product: " + item.getProduct().getName() +
+                        ", Qty: " + item.getQuantity())
+        );
+
+        recalculateTotal(cart); // update total safely
+        cartRepository.save(cart);
+    }
+
+
+
+    //  Helper method
+    private void recalculateTotal(Cart cart) {
+        // since your price is already a BigDecimal, better to stick with BigDecimal
+        BigDecimal total = cart.getItems().stream()
+                .map(CartItem::getPrice)   // each item already has price = (customPrice × quantity)
+                .reduce(BigDecimal.ZERO, BigDecimal::add);
+
+        cart.setTotal(total);
+    }
+
 }

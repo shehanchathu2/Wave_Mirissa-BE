@@ -68,4 +68,11 @@ public class CartController {
 
         return new CartResponse(cart.getId(), cart.getTotal(), items);
     }
+
+
+    @DeleteMapping("/clear/ordered/{userId}")
+    public void clearOrderedItems(@PathVariable Long userId, @RequestBody List<Long> itemIds) {
+        cartService.removeOrderedItems(userId, itemIds);
+    }
+
 }

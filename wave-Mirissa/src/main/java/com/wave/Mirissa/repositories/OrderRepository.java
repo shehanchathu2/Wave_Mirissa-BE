@@ -36,4 +36,6 @@ public interface OrderRepository extends JpaRepository<Order, Long> {
             "ORDER BY MONTH(o.createdAt)")
     List<Object[]> getMonthlyRevenueAndOrders();
 
+    Optional<Order> findById(Long id); // Already exists via JpaRepository
+
 }

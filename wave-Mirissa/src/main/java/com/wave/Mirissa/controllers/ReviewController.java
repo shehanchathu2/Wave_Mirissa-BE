@@ -23,6 +23,7 @@ public class ReviewController {
     @PostMapping("/submit")
     public Review submitOrUpdateReview(@RequestBody ReviewRequestDTO request) {
         return reviewService.submitOrUpdateReview(
+                request.getOrderId(),        // ✅ pass orderId now
                 request.getOrderItemId(),
                 request.getProductId(),
                 request.getUserId(),
@@ -31,14 +32,20 @@ public class ReviewController {
         );
     }
 
-    @GetMapping("/user/{userId}/product/{productId}")
+
+
+
+
+    @GetMapping("/user/{userId}/product/{productId}/order/{orderItemId}")
     public ResponseEntity<Review> getUserProductReview(
             @PathVariable Long userId,
-            @PathVariable Long productId) {
-        return reviewService.getReviewForUserAndProduct(userId, productId)
+            @PathVariable Long productId,
+            @PathVariable Long orderItemId) {
+        return reviewService.getReviewForUserAndProduct(userId, productId, orderItemId)
                 .map(ResponseEntity::ok)
-                .orElse(ResponseEntity.notFound().build()); // return 404 instead of null
+                .orElse(ResponseEntity.notFound().build());
     }
+
 
 
     // Get reviews for a product

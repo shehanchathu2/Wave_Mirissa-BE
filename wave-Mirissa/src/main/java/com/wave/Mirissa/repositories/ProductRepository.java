@@ -21,4 +21,5 @@ public interface ProductRepository extends JpaRepository<Products,Long> {
     List<Products> findByTypeForDbIgnoreCase(String typeForDb);
 
 
+    List<Products> findByPersonalize(String none);
 }

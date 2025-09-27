@@ -30,6 +30,12 @@ public class ProductController {
         return new ResponseEntity<>(productService.getAllProducts(), HttpStatus.OK);
     }
 
+    @GetMapping("/AllproductsWithoutPersonality")
+    public ResponseEntity<List<Products>>  getAllProductsWithoutPersonality(){
+        return new ResponseEntity<>(productService.getAllProductsWithoutPersonality(), HttpStatus.OK);
+    }
+
+
     @GetMapping("/{id}")
     public Products getProduct(@PathVariable Long id){
         return productService.getProductsByID(id);

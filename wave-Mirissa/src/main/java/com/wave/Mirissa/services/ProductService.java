@@ -21,6 +21,11 @@ public class ProductService {
         return productRepository.findAll();
     }
 
+
+    public List<Products> getAllProductsWithoutPersonality() {
+        return productRepository.findByPersonalize("none");
+    }
+
     public Products getProductsByID(Long id) {
 
         return productRepository.findById(id).get();

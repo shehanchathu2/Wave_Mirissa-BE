@@ -43,6 +43,7 @@ public class ProductService {
     @Transactional
     public Products addProduct(Products products) {
 
+        // Handle customizations
         List<Customization> inputCustomizations = products.getCustomizations();
         if (inputCustomizations != null && !inputCustomizations.isEmpty()) {
             List<Long> ids = inputCustomizations.stream()
@@ -55,14 +56,11 @@ public class ProductService {
                     .map(Customization::getName)
                     .collect(Collectors.joining(","));
             products.setCustomization(customizationNames);
-        }else {
+        } else {
             products.setCustomization(null);
         }
 
-
-        System.out.println("Saving producttype: " + products.getTypeForDb());
-        System.out.println("Incoming product JSON: " + products);
-
+        // Set product type
         if (products instanceof Ring) {
             products.setTypeForDb("ring");
         } else if (products instanceof Necklace) {
@@ -70,19 +68,24 @@ public class ProductService {
         } else if (products instanceof WristBand) {
             products.setTypeForDb("wristband");
         } else if (products instanceof Bracelet) {
-            products.setTypeForDb("Bracelet");
-        }else if (products instanceof Earring) {
+            products.setTypeForDb("bracelet");
+        } else if (products instanceof Earring) {
             products.setTypeForDb("earring");
-        }else if (products instanceof Anklet) {
+        } else if (products instanceof Anklet) {
             products.setTypeForDb("anklet");
         }
 
+        // Default personalize value
         if (products.getPersonalize() == null || products.getPersonalize().isBlank()) {
-            products.setPersonalize("none"); // default value if nothing sent
+            products.setPersonalize("none");
         }
+
+        // 3D Model URL is directly mapped from the incoming JSON to products.modelUrl
+        System.out.println("Saving product with 3D model URL: " + products.getModelUrl());
 
         return productRepository.save(products);
     }
+
 
     public Products getProduct(int id) {
         return productRepository.findById((long) id).orElse(null);

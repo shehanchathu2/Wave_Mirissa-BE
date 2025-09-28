@@ -61,6 +61,20 @@ public abstract class Products {
     @JsonProperty("image_url3")
     private String imageUrl3;
 
+    // Add this field inside your Products class
+    @JsonProperty("model_url")
+    @Column(name = "model_url")
+    private String modelUrl;
+
+    // Getter and Setter
+    public String getModelUrl() {
+        return modelUrl;
+    }
+
+    public void setModelUrl(String modelUrl) {
+        this.modelUrl = modelUrl;
+    }
+
 
 
 

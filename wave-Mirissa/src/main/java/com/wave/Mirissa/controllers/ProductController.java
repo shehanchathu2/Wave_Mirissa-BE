@@ -15,6 +15,7 @@ import org.springframework.web.multipart.MultipartFile;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.UUID;
 
 @RestController
 @CrossOrigin(origins = "http://localhost:5173")
@@ -22,6 +23,8 @@ import java.util.Map;
 public class ProductController {
     @Autowired
     private ProductService productService;
+
+    @Autowired
     private ProductRepository productRepository;
 
 
@@ -40,6 +43,16 @@ public class ProductController {
     public Products getProduct(@PathVariable Long id){
         return productService.getProductsByID(id);
     }
+
+
+    // 🔑 New UUID endpoint
+    @GetMapping("/uuid/{uuid}")
+    public ResponseEntity<Products> getProductByUuid(@PathVariable UUID uuid) {
+        return productRepository.findByUuid(uuid)
+                .map(ResponseEntity::ok)
+                .orElse(ResponseEntity.notFound().build());
+    }
+
 
     @PostMapping("/addproducts")
     public ResponseEntity<?> addProduct(@RequestBody Products products) {

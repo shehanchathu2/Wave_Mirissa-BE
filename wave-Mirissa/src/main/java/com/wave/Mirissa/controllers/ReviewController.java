@@ -23,7 +23,7 @@ public class ReviewController {
     @PostMapping("/submit")
     public Review submitOrUpdateReview(@RequestBody ReviewRequestDTO request) {
         return reviewService.submitOrUpdateReview(
-                request.getOrderId(),        // ✅ pass orderId now
+                request.getOrderId(),
                 request.getOrderItemId(),
                 request.getProductId(),
                 request.getUserId(),

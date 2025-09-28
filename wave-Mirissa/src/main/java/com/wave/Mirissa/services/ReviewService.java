@@ -14,23 +14,35 @@ public class ReviewService {
     private final ReviewRepository reviewRepository;
     private final OrderItemRepository orderItemRepository;
     private final ProductRepository productsRepository;
-    private final UserRepository userRepository; // assuming you have this
+    private final UserRepository userRepository;
     private final OrderRepository orderRepository;
 
-
-
-    public ReviewService(ReviewRepository reviewRepository, OrderItemRepository orderItemRepository,
-                         ProductRepository productsRepository, UserRepository userRepository, OrderRepository orderRepository) {
+    public ReviewService(ReviewRepository reviewRepository,
+                         OrderItemRepository orderItemRepository,
+                         ProductRepository productsRepository,
+                         UserRepository userRepository,
+                         OrderRepository orderRepository) {
         this.reviewRepository = reviewRepository;
         this.orderItemRepository = orderItemRepository;
         this.productsRepository = productsRepository;
         this.userRepository = userRepository;
-
         this.orderRepository = orderRepository;
     }
 
-    public Review submitOrUpdateReview(Long orderId, Long orderItemId, Long productId, Long userId, int rating, String comment) {
-
+    // ✅ Updated to accept images
+    public Review submitOrUpdateReview(
+            Long orderId,
+            Long orderItemId,
+            Long productId,
+            Long userId,
+            int rating,
+            String comment,
+            String imageUrl1,
+            String imageUrl2,
+            String imageUrl3,
+            String imageUrl4,
+            String imageUrl5
+    ) {
         System.out.println("Received review request:");
         System.out.println("OrderId: " + orderId);
         System.out.println("OrderItemId: " + orderItemId);
@@ -56,7 +68,7 @@ public class ReviewService {
         Products product = productsRepository.findById(productId)
                 .orElseThrow(() -> new RuntimeException("Product not found"));
 
-        User user = order.getUser(); // Directly get user from order
+        User user = order.getUser();
 
         // Check if user owns this order
         if (!user.getId().equals(userId)) {
@@ -79,11 +91,15 @@ public class ReviewService {
             review.setComment(comment);
         }
 
+        // ✅ Set images
+        review.setImageUrl1(imageUrl1);
+        review.setImageUrl2(imageUrl2);
+        review.setImageUrl3(imageUrl3);
+        review.setImageUrl4(imageUrl4);
+        review.setImageUrl5(imageUrl5);
+
         return reviewRepository.save(review);
     }
-
-
-
 
     public Optional<Review> getReviewForUserAndProduct(Long userId, Long productId, Long orderItemId) {
         User user = userRepository.findById(userId)
@@ -92,14 +108,11 @@ public class ReviewService {
         Products product = productsRepository.findById(productId)
                 .orElseThrow(() -> new RuntimeException("Product not found"));
 
-
         OrderItem orderItem = orderItemRepository.findById(orderItemId)
                 .orElseThrow(() -> new RuntimeException("Order item not found"));
 
         return reviewRepository.findByUserAndProductAndOrderItem(user, product, orderItem);
     }
-
-
 
     // Get all reviews for a specific product
     public List<ReviewResponseDTO> getReviewsByProductId(Long productId) {
@@ -111,7 +124,12 @@ public class ReviewService {
                         review.getId(),
                         review.getRating(),
                         review.getComment(),
-                        review.getUser().getUsername()
+                        review.getUser().getUsername(),
+                        review.getImageUrl1(),
+                        review.getImageUrl2(),
+                        review.getImageUrl3(),
+                        review.getImageUrl4(),
+                        review.getImageUrl5()
                 ))
                 .toList();
     }

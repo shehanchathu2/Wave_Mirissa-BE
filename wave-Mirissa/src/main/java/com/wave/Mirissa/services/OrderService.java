@@ -157,6 +157,20 @@ public class OrderService {
             userDTO.setId(order.getUser().getId());
             userDTO.setName(order.getUser().getUsername());
             userDTO.setEmail(order.getUser().getEmail());
+            if (order.getUser().getAddress() != null) {
+                OrderDetailedDTO.AddressDTO addressDTO = new OrderDetailedDTO.AddressDTO();
+                Address addr = order.getUser().getAddress();
+                addressDTO.setContactName(addr.getContactName());
+                addressDTO.setStreet(addr.getStreet());
+                addressDTO.setCity(addr.getCity());
+                addressDTO.setState(addr.getState());
+                addressDTO.setArea(addr.getArea());
+                addressDTO.setZipCode(addr.getZipCode());
+                addressDTO.setPhone(addr.getPhone());
+                addressDTO.setCountry(addr.getCountry());
+
+               userDTO.setAddress(addressDTO);
+            }
             dto.setUser(userDTO);
         }
 

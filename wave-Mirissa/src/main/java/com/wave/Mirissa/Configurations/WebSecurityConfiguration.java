@@ -86,7 +86,8 @@ public class WebSecurityConfiguration {
                                         "/api/user/orders/my-orders/**",
                                         "/api/user/orders/**",
                                         "/api/reviews/**",
-                                        "/api/banners/**"
+                                        "/api/banners/**",
+                                        "/api/admin/orders/paid"
                                 ).permitAll()
 
                                 // Role-protected endpoints

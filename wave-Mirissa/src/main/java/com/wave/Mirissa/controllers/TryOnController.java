@@ -80,7 +80,9 @@ public class TryOnController {
             // add necklace details
             if (necklace != null) {
                 responseNode.put("necklaceId", necklace.getProduct_id());
+
                 responseNode.put("name", necklace.getName());
+                responseNode.set("uuid", objectMapper.valueToTree(necklace.getUuid()));
                 responseNode.put("price", necklace.getPrice());
                 responseNode.put("description", necklace.getDescription());
                 responseNode.put("material", necklace.getMaterial());
@@ -88,6 +90,9 @@ public class TryOnController {
                 responseNode.put("imageUrl2", necklace.getImageUrl2());
                 responseNode.put("imageUrl3", necklace.getImageUrl3());
             }
+
+            //add necklace uuid
+
 
             // add AI-generated personality description
             responseNode.put("personalityDescription", personalityDescription);

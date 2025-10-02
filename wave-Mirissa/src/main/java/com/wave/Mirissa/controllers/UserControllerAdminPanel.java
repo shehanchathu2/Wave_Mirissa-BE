@@ -1,6 +1,7 @@
 package com.wave.Mirissa.controllers;
 
 import com.wave.Mirissa.dtos.UpdateUserRoleDTO;
+import com.wave.Mirissa.dtos.UserDTOsecond;
 import com.wave.Mirissa.exception.UserNotFoundException;
 import com.wave.Mirissa.models.Customization;
 import com.wave.Mirissa.models.Role;
@@ -26,8 +27,16 @@ public class UserControllerAdminPanel {
     }
 
     @GetMapping("/users")
-    List<User> getAllUsers() {
-        return userRepository.findAll();
+    public List<UserDTOsecond> getAllUsers() {
+        return userRepository.findAll().stream()
+                .map(user -> new UserDTOsecond(
+                        user.getId(),
+                        user.getUsername(),
+                        user.getEmail(),
+                        user.getPassword(),
+                        user.getRole()
+                ))
+                .toList();
     }
 
     @GetMapping("/user/{id}")

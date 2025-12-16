@@ -1,5 +1,6 @@
 package com.wave.Mirissa.services;
 
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.core.io.FileSystemResource;
 import org.springframework.http.MediaType;
 import org.springframework.http.client.reactive.ReactorClientHttpConnector;
@@ -19,13 +20,13 @@ public class PythonTryOnClient {
     private final WebClient webClient;
 
 
-    public PythonTryOnClient() {
+    public PythonTryOnClient( @Value("${python.tryon.base-url}") String baseUrl) {
         ExchangeStrategies strategies = ExchangeStrategies.builder()
                 .codecs(configurer -> configurer.defaultCodecs().maxInMemorySize(20 * 1024 * 1024)) // 20 MB
                 .build();
 
         this.webClient = WebClient.builder()
-                .baseUrl("http://localhost:5000")
+                .baseUrl(baseUrl)
                 .clientConnector(new ReactorClientHttpConnector(HttpClient.create()))
                 .exchangeStrategies(strategies)
                 .build();
